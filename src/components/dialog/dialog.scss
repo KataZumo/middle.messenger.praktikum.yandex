@@ -1,8 +1,8 @@
 @import '../../assets/variables';
 
 .dialog {
-  background: $dialog-bgcolor;
-  box-shadow: $dialog-shadow;
+  background: #FFF;
+  box-shadow: 0 0 6px #00000024;
   border-radius: 12px;
   padding: 30px;
   width: 300px;

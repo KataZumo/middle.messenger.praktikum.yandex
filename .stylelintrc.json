@@ -22,6 +22,13 @@
         "except": ["first-nested"],
         "ignore": ["after-comment"]
       }
-    ]
+    ],
+    "color-function-notation": "modern",
+    "alpha-value-notation": "number",
+    "shorthand-property-no-redundant-values": true,
+    "selector-class-pattern": "^[a-z]+[a-zA-Z0-9_-]*$",
+    "scss/at-import-no-partial-leading-underscore": null, 
+    "scss/dollar-variable-pattern": null,  
+    "scss/no-global-function-names": null
   }
 }
