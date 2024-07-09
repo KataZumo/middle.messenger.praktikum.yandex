@@ -1,5 +1,4 @@
 @import '../../assets/variables';
-@use "sass:color";
 
 .modal {
   position: fixed;
@@ -49,7 +48,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: color.scale($button-bgcolor, $lightness: -10%);
+      background-color: darken($button-bgcolor, 10%);
     }
   }
 

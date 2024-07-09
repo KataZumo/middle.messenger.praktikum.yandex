@@ -1,5 +1,9 @@
 {
   "extends": "stylelint-config-standard",
+  "include": [
+    "src/*/*.scss", 
+    "assets/*/*.scss"
+  ],
   "plugins": ["stylelint-scss"],
   "rules": {
     "import-notation": null,
