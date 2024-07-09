@@ -8,7 +8,6 @@ $button-bgcolor: #007BFF;
 $button-color: #fff;
 $button-hover-bgcolor: #0056b3;
 
-
 html, body {
   padding: 0;
   margin: 0;
@@ -26,10 +25,10 @@ a {
   color: $link-color;
   text-decoration: none;
   align-items: center;
+
   &:hover {
     text-decoration: underline;
   };
-  
 }
 
 button {
@@ -41,6 +40,7 @@ button {
   background-color: $button-bgcolor;
   color: $button-color;
   cursor: pointer;
+
   &:hover {
     background-color: $button-hover-bgcolor;
   }
@@ -60,13 +60,11 @@ button {
   opacity: 1;
 }
 
-
 .login-title {
   font-size: 24px;
   margin-bottom: 20px;
   text-align: center;
 }
-
 
 .login-form {
   display: flex;
@@ -76,19 +74,18 @@ button {
   width: 100%; 
 }
 
-
 .input {
   padding: 10px;
   border: 1px solid $input-border-color;
   border-radius: 4px;
   font-size: 16px;
   width: 100%;
+
   &:focus {
     border-color: $input-focus-border-color;
     outline: none;
   }
 }
-
 
 .login-form-bottom {
   display: flex;
@@ -97,7 +94,7 @@ button {
   align-items: center;
 }
 
-.login_input{
+.login_input {
   display: flex;
   flex-direction: column;
   align-items: center;

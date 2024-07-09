@@ -30,17 +30,17 @@
   }
 
   &__label {
-    flex: 0 0 200px; /* Фиксированная ширина для метки */
+    flex: 0 0 200px;
     margin-right: 1rem;
   }
 
   &__value {
     flex: 1;
     padding: 0.5rem;
-    border: none; /* Убираем рамку */
-    border-bottom: 1px solid #ccc; /* Добавляем линию снизу */
-    border-radius: 0; /* Убираем закругление */
-    box-sizing: border-box; /* Добавляем box-sizing для корректного расчета размеров */
+    border: none; 
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    box-sizing: border-box;
   }
 
   &__modal {

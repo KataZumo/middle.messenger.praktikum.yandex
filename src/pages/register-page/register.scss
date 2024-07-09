@@ -8,7 +8,6 @@ $button-bgcolor: #007BFF;
 $button-color: #fff;
 $button-hover-bgcolor: #0056b3;
 
-
 html, body {
   padding: 0;
   margin: 0;
@@ -25,6 +24,7 @@ html, body {
 a {
   color: $link-color;
   text-decoration: none;
+
   &:hover {
     text-decoration: underline;
   }
@@ -39,6 +39,7 @@ button {
   background-color: $button-bgcolor;
   color: $button-color;
   cursor: pointer;
+
   &:hover {
     background-color: $button-hover-bgcolor;
   }
@@ -47,10 +48,10 @@ button {
 .register-page {
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   width: 340px;
-  height: 600px; 
+  height: 600px;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -58,13 +59,11 @@ button {
   opacity: 1;
 }
 
-
 .register-title {
   font-size: 24px;
   margin-bottom: 20px;
-  text-align: center; 
+  text-align: center;
 }
-
 
 .register-form {
   display: flex;
@@ -74,19 +73,18 @@ button {
   width: 100%;
 }
 
-
 .input {
   padding: 10px 10px 10px 0;
-  border: none; 
+  border: none;
   border-bottom: 1px solid $input-border-color;
   font-size: 16px;
-  width: 100%; 
+  width: 100%;
+
   &:focus {
-    border-bottom-color: $input-focus-border-color; 
+    border-bottom-color: $input-focus-border-color;
     outline: none;
   }
 }
-
 
 .register-form-bottom {
   display: flex;
