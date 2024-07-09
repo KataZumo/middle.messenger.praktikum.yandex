@@ -1,8 +1,13 @@
 import { Link } from "../../components";
 import Block from "../../tools/Block";
 
+interface ErrorProps {
+  text: string;
+  className: string;
+  href: string;
+}
 export default class ErrorPage500 extends Block {
-  constructor(props: any = {}) {
+  constructor(props: ErrorProps) {
     super({
       ...props,
       link: new Link({

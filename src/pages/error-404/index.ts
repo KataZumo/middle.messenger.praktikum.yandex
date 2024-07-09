@@ -1,11 +1,13 @@
-// import './error-404.scss';
-// export { default as Error404Page } from './error-404.hbs?raw';
-
 import { Link } from "../../components";
 import Block from "../../tools/Block";
 
+interface ErrorProps {
+  text: string;
+  className: string;
+  href: string;
+}
 export default class ErrorPage extends Block {
-  constructor(props: any) {
+  constructor(props: ErrorProps) {
     super({
       ...props,
       link: new Link({

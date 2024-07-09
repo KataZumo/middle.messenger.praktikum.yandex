@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: "module",
     warnOnUnsupportedTypeScriptVersion: false,
+    project: './tsconfig.json',
   },
   settings: {
     'import/resolver': {
@@ -27,6 +28,7 @@ module.exports = {
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-this-alias": "error",
     '@typescript-eslint/no-this-alias': 'off',
+    "@typescript-eslint/strict-boolean-expressions": "error",
     "@typescript-eslint/no-unused-vars": ["warn", {
       argsIgnorePattern: "^_",
       ignoreRestSiblings: true,
