@@ -27,5 +27,7 @@ module.exports = {
         tsx: "never",
       },
     ],
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
   },
 };
