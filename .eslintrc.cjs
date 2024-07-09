@@ -11,7 +11,6 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
-    // "prettier/prettier": "error",
     "import/order": [
       "off",
       {
@@ -19,8 +18,8 @@ module.exports = {
       },
     ],
     "import/extensions": [
-      "off", // Уровень серьезности: 0 = off, 1 = warn, 2 = error
-      "ignorePackages", // Опции: "never" | "always" | "ignorePackages"
+      "off",
+      "ignorePackages",
       {
         js: "never",
         jsx: "never",

@@ -7,7 +7,6 @@ interface CustomHeaders {
 interface Params {
   [key: string]: string | number | boolean;
 }
-
 class HttpRequest {
   private baseURL: string;
 
@@ -23,7 +22,6 @@ class HttpRequest {
       )
       .join("&");
   }
-
 
   private request<T>(
     method: HttpMethod,
@@ -62,7 +60,6 @@ class HttpRequest {
     });
   }
 
-
   get<T>(
     url: string,
     params: Params = {},
@@ -73,16 +70,13 @@ class HttpRequest {
     return this.request<T>("GET", fullURL, null, headers);
   }
 
-
   post<T>(url: string, body: unknown, headers: CustomHeaders = {}): Promise<T> {
     return this.request<T>("POST", url, body, headers);
   }
 
-
   put<T>(url: string, body: unknown, headers: CustomHeaders = {}): Promise<T> {
     return this.request<T>("PUT", url, body, headers);
   }
-
 
   delete<T>(
     url: string,

@@ -31,7 +31,6 @@ async function createServer() {
     res.sendFile(path.join(__dirname, "dist", "index.html"));
   });
 
-
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
   });

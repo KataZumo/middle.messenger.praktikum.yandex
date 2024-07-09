@@ -1,4 +1,3 @@
-import { error } from "console";
 import ChatPage from "./pages/chat-page";
 import LoginPage from "./pages/login-page";
 import ProfilePage from "./pages/profile-page";

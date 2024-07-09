@@ -1,5 +1,4 @@
 import Block from "../../tools/Block";
-import Button from "../button";
 import "./input.scss";
 
 // interface InputProps {
@@ -93,7 +92,6 @@ import "./input.scss";
 //     return phoneRegex.test(value);
 //   }
 // }
-
 
 // =============
 // TODO: тут я хотел сделать валидация и показать сообщение в котором указывалась ошибка, но input никак не обнаруживался :((
@@ -216,11 +214,6 @@ import "./input.scss";
 //     return phoneRegex.test(value);
 //   }
 // }
-
-
-
-
-
 
 interface InputProps {
   type: string;
