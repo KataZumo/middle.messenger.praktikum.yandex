@@ -30,4 +30,13 @@ module.exports = {
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/space-before-function-paren": "off",
   },
+  overrides: [
+    {
+      files: ["*.scss"],
+      rules: {
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/space-before-function-paren": "off",
+      },
+    },
+  ],
 };
