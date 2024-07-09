@@ -1,4 +1,5 @@
-@import './assets/variables';
+// @import './assets/variables';
+
 
 html, body {
   padding: 0;
@@ -8,7 +9,7 @@ html, body {
 
 body {
   font: $font-regular;
-  background-color: $text-bgcolor;
+  background-color: #FFF;;
   color: $text-color;
   display: flex;
   align-items: center;
