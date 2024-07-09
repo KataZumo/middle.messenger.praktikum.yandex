@@ -1,0 +1,68 @@
+$button-bgcolor: #007bff;
+$header-background-color: #343a40;
+$link-color: #007bff;
+$button-color: white;
+
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+
+  &__content {
+    width: 600px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 2rem;
+  }
+  
+  .profile-main-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-main-info__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .profile-main-info__label {
+    flex: 0 0 200px; /* Фиксированная ширина для метки */
+    margin-right: 1rem;
+  }
+
+  .profile-main-info__value {
+    flex: 1;
+    padding: 0.5rem;
+    border: none; /* Убираем рамку */
+    border-bottom: 1px solid #ccc; /* Добавляем линию снизу */
+    border-radius: 0; /* Убираем закругление */
+    box-sizing: border-box; /* Добавляем box-sizing для корректного расчета размеров */
+  }
+
+  .profile-main-info__name {
+    margin-bottom: 1rem;
+  }
+
+  .profile-main-info__link-container {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chat-page__profile-link {
+    margin: 0.5rem 0;
+  }
+}

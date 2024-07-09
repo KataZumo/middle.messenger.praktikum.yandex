@@ -1,0 +1,25 @@
+<div class="chat-page">
+  <div class="chat-page__sidebar">
+    <div class="chat-page__sidebar-header">
+      {{> Link page="profile" text="Профиль"}}
+      <input type="text" placeholder="Поиск" class="chat-page__search-input"/>
+    </div>
+    {{#> ChatList className="chat-page__list" }}
+      {{#each (chat-page-list)}}
+        {{> ChatItem name=this.name message=this.message unread=this.unread avatar=this.avatar}}
+      {{/each}}
+    {{/ ChatList }}
+  </div>
+  <div class="chat-page__main">
+    <div class="chat-page__header">
+      <h2>Чат с {{currentChatName}}</h2>
+    </div>
+    <div class="chat-page__messages" id="messages">
+    </div>
+    <div class="chat-page__footer">
+      <input type="text" id="message" placeholder="Введите сообщение..." />
+      <button id="send-button">Отправить</button>
+    </div>
+  </div>
+</div>
+

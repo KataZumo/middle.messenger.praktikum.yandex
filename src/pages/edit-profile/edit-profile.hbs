@@ -1,0 +1,22 @@
+<div class="profile-page">
+  <div class="profile-page__back-button">
+    {{> Link page="profile" text="Назад" className="profile-page__back-link"}}
+  </div>
+  <div class="profile-page__content">
+    <div class="profile-page__header">
+      <img src="https://cdn.fishki.net/upload/post/2018/01/26/2494216/tn/56f54d86132943dce7f8598753d8a8a0.jpg" alt="Profile Photo" class="profile-page__photo">
+    </div>
+    <div class="profile-info">
+      <h1 class="profile-info__name">{{name}}</h1>
+      {{#each items}}
+        <div class="profile-info__item">
+          <span class="profile-info__label">{{this.label}}:</span>
+          <input type="text" class="profile-info__value" value="{{this.value}}">
+        </div>
+      {{/each}}
+    </div>
+    <div class="profile-page__actions">
+      <button class="profile-page__link profile-page__link--save">Сохранить</button>
+    </div>
+  </div>
+</div>

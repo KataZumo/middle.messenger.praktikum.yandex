@@ -1,0 +1,12 @@
+@import '../../assets/variables';
+
+.chat-list {
+  background: $chat-list-bgcolor;
+  height: 100%;
+  overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+
+  
+}
