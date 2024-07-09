@@ -4,11 +4,8 @@
 import { Link } from "../../components";
 import Block from "../../tools/Block";
 
-
-
-
 export default class ErrorPage extends Block {
-  constructor(props: any = {}) {
+  constructor(props: any) {
     super({
       ...props,
       link: new Link({

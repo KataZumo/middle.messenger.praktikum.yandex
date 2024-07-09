@@ -1,3 +1,3 @@
-import "./change-password.scss";
+// import "./change-password.scss";
 
-export { default as ChangePasswordPage } from "./change-password.hbs?raw";
+// export { default as ChangePasswordPage } from "./change-password.hbs?raw";
