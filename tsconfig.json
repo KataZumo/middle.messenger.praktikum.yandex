@@ -15,6 +15,6 @@
       "sourceMap": true,
       "strictNullChecks": true
     },
-    "include": ["src/**/*", "custom.d.ts"],
+    "include": ["src/**/*", "custom.d.ts", "server.js"],
     "exclude": ["node_modules", "dist"]
   }
