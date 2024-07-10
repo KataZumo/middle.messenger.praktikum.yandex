@@ -13,7 +13,7 @@ interface ButtonProps {
 
 export default class Button extends Block {
   constructor(props: ButtonProps) {
-    super({...props});
+    super(props);
   }
 
   render() {
