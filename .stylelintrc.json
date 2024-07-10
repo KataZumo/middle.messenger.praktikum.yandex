@@ -6,8 +6,8 @@
   ],
   "plugins": ["stylelint-scss"],
   "rules": {
-    "import-notation": null,
     "at-rule-import-notation": "no-url", 
+    "import-notation": "string",
     "at-rule-no-unknown": [
       true,
       {
