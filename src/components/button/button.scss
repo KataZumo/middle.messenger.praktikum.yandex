@@ -1,0 +1,15 @@
+@import '../../assets/variables';
+
+$button-bgcolor: #007bff;
+
+.button {
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+  background-color: $button-bgcolor;
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  margin-top: 30px;
+}
