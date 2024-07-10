@@ -7,9 +7,12 @@ html, body {
 }
 
 body {
-  font: $font-regular;
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 13px;
   background-color: #FFF;
-  color: $text-color;
+  color:  #007bff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +20,7 @@ body {
 }
 
 a {
-  color: $link-color;
+  color:  #007bff;
   text-decoration: none;
 
   &:hover {

@@ -30,7 +30,7 @@
   &__label {
     margin-bottom: 10px;
     cursor: pointer;
-    color: $link-color;
+    color: #007bff;
     text-decoration: underline;
   }
 
@@ -41,14 +41,14 @@
   &__apply-button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: $button-bgcolor;
+    background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 
     &:hover {
-      background-color: darken($button-bgcolor, 10%);
+      background-color: #7dbcff;
     }
   }
 

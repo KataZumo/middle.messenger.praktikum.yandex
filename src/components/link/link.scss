@@ -1,18 +1,21 @@
 @import '../../assets/variables';
 
 .link {
-  font: $font-small;
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 40px;
   width: 100%;
   text-align: center;
-  color: $link-color;
+  color: #007bff;
   text-decoration: none;
   cursor: pointer;
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
+.link:hover {
+  text-decoration: underline;
 }
