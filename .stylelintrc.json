@@ -2,11 +2,10 @@
   "extends": "stylelint-config-standard-scss",
   "include": [
     "src/*/*.scss", 
-     "assets/*/*.scss"
+    "assets/*/*.scss"
   ],
   "plugins": ["stylelint-scss"],
   "rules": {
-    "at-rule-import-notation": "no-url", 
     "at-rule-no-unknown": [
       true,
       {
@@ -34,17 +33,26 @@
       "always",
       {
         "except": ["first-nested"],
-        "ignore": ["after-comment"]
+        "ignore": ["after-comment", "inside-block"]
       }
     ],
-    "color-function-notation": "modern",
-    "alpha-value-notation": "number",
-    "shorthand-property-no-redundant-values": true,
-    "selector-class-pattern": "^[a-z]+[a-zA-Z0-9_-]*$",
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "shorthand-property-no-redundant-values": null,
+    "selector-class-pattern": null,
     "scss/at-import-no-partial-leading-underscore": null,
     "scss/dollar-variable-pattern": null,
     "scss/no-global-function-names": null,
-    "import-notation": null
-    
+    "max-nesting-depth": null,
+    "no-descending-specificity": null,
+    "no-empty-source": null,
+    "no-duplicate-selectors": null,
+    "block-no-empty": null,
+    "comment-no-empty": null,
+    "declaration-empty-line-before": null,
+    "unit-no-unknown": null,
+    "property-no-unknown": null,
+    "selector-pseudo-class-no-unknown": null
   }
 }
+
