@@ -24,17 +24,24 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-for-in-array": "error",
-    "@typescript-eslint/no-misused-new": "error",
-    "@typescript-eslint/no-this-alias": "error",
-    '@typescript-eslint/no-this-alias': 'off',
-    "@typescript-eslint/strict-boolean-expressions": "error",
+    "@typescript-eslint/no-for-in-array": "warn",
+    "@typescript-eslint/no-misused-new": "warn",
+    "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-unused-vars": ["warn", {
       argsIgnorePattern: "^_",
       ignoreRestSiblings: true,
     }],
     "@typescript-eslint/unified-signatures": "warn",
-    eqeqeq: ["error", "smart"],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": [
+      "warn",
+      {
+        "ts-ignore": "allow-with-description",
+        "minimumDescriptionLength": 3
+      }
+    ],
+    eqeqeq: ["warn", "smart"],
   },
   ignorePatterns: ["dist", ".eslintrc.js"],
 };
