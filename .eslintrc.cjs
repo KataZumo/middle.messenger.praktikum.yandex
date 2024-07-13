@@ -28,19 +28,10 @@ module.exports = {
     "@typescript-eslint/no-misused-new": "warn",
     "@typescript-eslint/no-this-alias": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", {
-      argsIgnorePattern: "^_",
-      ignoreRestSiblings: true,
-    }],
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/unified-signatures": "warn",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-ts-comment": [
-      "warn",
-      {
-        "ts-ignore": "allow-with-description",
-        "minimumDescriptionLength": 3
-      }
-    ],
+    "@typescript-eslint/ban-ts-comment": "off",
     eqeqeq: ["warn", "smart"],
   },
   ignorePatterns: ["dist", ".eslintrc.js"],
