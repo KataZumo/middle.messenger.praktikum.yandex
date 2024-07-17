@@ -6,6 +6,7 @@ export interface IProps {
   events?: { [key: string]: (e: Event) => void };
   lists?: Block[];
   [key: string]: unknown;
+  attr?: { [key: string]: string }
 }
 
 export default class Block {
@@ -147,23 +148,26 @@ export default class Block {
     ) as HTMLTemplateElement;
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
 
-    // Comment if you want to see
     Object.values(this.children).forEach((child) => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
       if (stub) {
-        // @ts-ignore
-        stub.replaceWith(child.getContent());
+        const content = child.getContent();
+        if (content) {
+          stub.replaceWith(content);
+        }
       }
     });
-
+    
     Object.entries(this.lists).forEach(([key, child]) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
       child.forEach((item) => {
         if (item instanceof Block) {
-          // @ts-ignore
-          listCont.content.append(item.getContent());
+          const content = item.getContent();
+          if (content) {
+            listCont.content.append(content);
+          }
         } else {
           listCont.content.append(`${item}`);
         }
@@ -173,6 +177,7 @@ export default class Block {
         stub.replaceWith(listCont.content);
       }
     });
+    
 
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
