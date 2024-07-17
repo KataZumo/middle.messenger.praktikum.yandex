@@ -5,7 +5,7 @@ export interface IProps {
   __id?: string;
   events?: { [key: string]: (e: Event) => void };
   lists?: Block[];
-  attr?: { [key: string]: string }; // Добавлена типизация для атрибутов
+  attr?: { [key: string]: string };
   [key: string]: unknown;
 }
 
@@ -25,7 +25,7 @@ export default class Block {
 
   children: { [key: string]: Block };
 
-  lists: { [key: string]: unknown[] };
+  lists: { [key: string]: unknown[] }; // Типизируем lists как объект массивов
 
   private eventBus: () => EventBus;
 
@@ -90,11 +90,11 @@ export default class Block {
   private _getChildrenPropsAndProps(propsAndChildren: IProps): {
     children: { [key: string]: Block };
     props: IProps;
-    lists: { [key: string]: any[] };
+    lists: { [key: string]: unknown[] };
   } {
     const children: { [key: string]: Block } = {};
     const props: IProps = {};
-    const lists: { [key: string]: any[] } = {};
+    const lists: { [key: string]: unknown[] } = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -159,11 +159,11 @@ export default class Block {
       }
     });
 
-    Object.entries(this.lists).forEach(([ list]) => {
+    Object.entries(this.lists).forEach(([list]) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
-      list.forEach((item) => {
+      (list as unknown as unknown[]).forEach((item) => {
         if (item instanceof Block) {
           const content = item.getContent();
           if (content) {
