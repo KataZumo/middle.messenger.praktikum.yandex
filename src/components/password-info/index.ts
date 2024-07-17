@@ -9,7 +9,7 @@ interface PasswordInfoProps {
 
 export default class PasswordInfoComponent extends Block {
   constructor(props: PasswordInfoProps) {
-    super(props);
+    super({...props});
   }
 
   render() {
