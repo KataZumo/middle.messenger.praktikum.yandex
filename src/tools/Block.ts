@@ -5,8 +5,8 @@ export interface IProps {
   __id?: string;
   events?: { [key: string]: (e: Event) => void };
   lists?: Block[];
+  attr?: { [key: string]: string }; // Добавлена типизация для атрибутов
   [key: string]: unknown;
-  attr?: { [key: string]: string }
 }
 
 export default class Block {
@@ -69,21 +69,21 @@ export default class Block {
     });
   }
 
-  componentDidMount(oldProps?: IProps): void {}
+  componentDidMount(): void {}
 
   dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate(oldProps: IProps, newProps: IProps): void {
-    const response = this.componentDidUpdate(oldProps, newProps);
+  private _componentDidUpdate(): void {
+    const response = this.componentDidUpdate();
     if (!response) {
       return;
     }
     this._render();
   }
 
-  componentDidUpdate(oldProps: IProps, newProps: IProps): boolean {
+  componentDidUpdate(): boolean {
     return true;
   }
 
@@ -113,8 +113,8 @@ export default class Block {
     const { attr = {} } = this.props;
 
     Object.entries(attr).forEach(([key, value]) => {
-      if (this._element) {
-        this._element.setAttribute(key, value as unknown as string);
+      if (this._element && typeof value === 'string') {
+        this._element.setAttribute(key, value);
       }
     });
   }
@@ -139,7 +139,7 @@ export default class Block {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
-    Object.entries(this.lists).forEach(([key, child]) => {
+    Object.entries(this.lists).forEach(([key, list]) => {
       propsAndStubs[key] = `<div data-id="__l_${_tmpId}"></div>`;
     });
 
@@ -148,6 +148,7 @@ export default class Block {
     ) as HTMLTemplateElement;
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
 
+    // Comment if you want to see
     Object.values(this.children).forEach((child) => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
       if (stub) {
@@ -157,12 +158,12 @@ export default class Block {
         }
       }
     });
-    
-    Object.entries(this.lists).forEach(([key, child]) => {
+
+    Object.entries(this.lists).forEach(([key, list]) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
-      child.forEach((item) => {
+      list.forEach((item) => {
         if (item instanceof Block) {
           const content = item.getContent();
           if (content) {
@@ -177,7 +178,6 @@ export default class Block {
         stub.replaceWith(listCont.content);
       }
     });
-    
 
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {

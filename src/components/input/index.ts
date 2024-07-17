@@ -234,7 +234,7 @@ export default class InputComponent extends Block {
       events: {
         change: (e: Event) =>
           props.onChange((e.target as HTMLInputElement).value),
-        blur: (e: Event) => this.validate(),
+        blur: () => this.validate(),
       },
     });
   }
