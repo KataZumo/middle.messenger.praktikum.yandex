@@ -139,7 +139,7 @@ export default class Block {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
-    Object.entries(this.lists).forEach(([key, list]) => {
+    Object.entries(this.lists).forEach(([key]) => {
       propsAndStubs[key] = `<div data-id="__l_${_tmpId}"></div>`;
     });
 
@@ -159,7 +159,7 @@ export default class Block {
       }
     });
 
-    Object.entries(this.lists).forEach(([key, list]) => {
+    Object.entries(this.lists).forEach(([ list]) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
