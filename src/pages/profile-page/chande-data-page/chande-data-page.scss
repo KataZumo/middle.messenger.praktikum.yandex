@@ -1,1 +1,39 @@
-// @import '../../../assets/variables';
+@import '../../../assets/variables';
+
+$button-bgcolor: #007bff;
+$button-color: white;
+
+.change-data-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+
+  &__content {
+    width: 600px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .change-button {
+    margin-top: 20px;
+    padding: 0.5rem 1rem;
+    background-color: $button-bgcolor;
+    color: $button-color;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: lighten($button-bgcolor, 10%);
+    }
+  }
+}
