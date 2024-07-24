@@ -15,6 +15,7 @@ export default class Block {
     FLOW_CDM: "flow:component-did-mount",
     FLOW_CDU: "flow:component-did-update",
     FLOW_RENDER: "flow:render",
+    FLOW_CDUM: 'flow:component-did-unmount',
   };
 
   private _element: HTMLElement | null = null;
@@ -51,10 +52,21 @@ export default class Block {
     });
   }
 
+  private _removeEvents() {
+    const { events = {} } = this.props;
+    Object.entries(events).forEach(([eventName, eventListener]) => {
+        if (this._element) {
+            this._element.removeEventListener(eventName, eventListener);
+        }
+    });
+}
+
   private _registerEvents(eventBus: EventBus): void {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this),
+  );
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -68,11 +80,23 @@ export default class Block {
       child.dispatchComponentDidMount();
     });
   }
+  private _componentDidUnmount() {
+    this.componentDidUnmount();
+
+    Object.values(this.children).forEach((child) => {
+        child.dispatchComponentDidUnmount();
+    });
+}
+
+protected componentDidUnmount() {}
 
   componentDidMount(): void {}
 
   dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+  }
+  dispatchComponentDidUnmount(): void {
+    this.eventBus().emit(Block.EVENTS.FLOW_CDUM);
   }
 
   private _componentDidUpdate(): void {
@@ -181,11 +205,12 @@ export default class Block {
 
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
+      this._removeEvents();
       this._element.replaceWith(newElement);
-    }
-    this._element = newElement;
-    this._addEvents();
-    this.addAttributes();
+  }
+  this._element = newElement as HTMLElement;
+  this._addEvents();
+  this.addAttributes();
   }
 
   render(): string {
