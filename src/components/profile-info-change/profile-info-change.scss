@@ -50,6 +50,10 @@
       outline: none;
       border-bottom: 2px solid $button-bgcolor;
     }
+
+    &:hover {
+      background-color: #384bf7;
+    }
   }
 
   &__modal {
