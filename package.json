@@ -7,8 +7,7 @@
     "build": "vite build",
     "start": "npm run build && node server.js",
     "lint": "eslint . --ext .ts,.js",
-    "stylelint": "stylelint \"**/*.scss\"",
-    "stylelint:fix": "stylelint \"**/*.scss\" --fix"
+    "stylelint": "stylelint '**/*.scss'"
   },
   "dependencies": {
     "concurrently": "^8.2.2",

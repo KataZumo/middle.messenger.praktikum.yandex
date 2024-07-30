@@ -8,7 +8,7 @@ interface LinkProps {
 
 export default class LinkComponent extends Block {
   constructor(props: LinkProps) {
-    super(props);
+    super({...props});
   }
 
   render() {

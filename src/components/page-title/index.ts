@@ -7,7 +7,7 @@ interface PageTitleProps {
 
 export default class PageTitle extends Block {
   constructor(props: PageTitleProps) {
-    super(props);
+    super({...props});
   }
 
   render() {

@@ -5,6 +5,7 @@ export interface IProps {
   __id?: string;
   events?: { [key: string]: (e: Event) => void };
   lists?: Block[];
+  attr?: { [key: string]: string };
   [key: string]: unknown;
 }
 
@@ -14,6 +15,7 @@ export default class Block {
     FLOW_CDM: "flow:component-did-mount",
     FLOW_CDU: "flow:component-did-update",
     FLOW_RENDER: "flow:render",
+    FLOW_CDUM: 'flow:component-did-unmount',
   };
 
   private _element: HTMLElement | null = null;
@@ -24,7 +26,7 @@ export default class Block {
 
   children: { [key: string]: Block };
 
-  lists: { [key: string]: unknown[] };
+  lists: { [key: string]: unknown[] }; // Типизируем lists как объект массивов
 
   private eventBus: () => EventBus;
 
@@ -50,10 +52,21 @@ export default class Block {
     });
   }
 
+  private _removeEvents() {
+    const { events = {} } = this.props;
+    Object.entries(events).forEach(([eventName, eventListener]) => {
+        if (this._element) {
+            this._element.removeEventListener(eventName, eventListener);
+        }
+    });
+}
+
   private _registerEvents(eventBus: EventBus): void {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this),
+  );
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -67,33 +80,45 @@ export default class Block {
       child.dispatchComponentDidMount();
     });
   }
+  private _componentDidUnmount() {
+    this.componentDidUnmount();
 
-  componentDidMount(oldProps?: IProps): void {}
+    Object.values(this.children).forEach((child) => {
+        child.dispatchComponentDidUnmount();
+    });
+}
+
+protected componentDidUnmount() {}
+
+  componentDidMount(): void {}
 
   dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
+  dispatchComponentDidUnmount(): void {
+    this.eventBus().emit(Block.EVENTS.FLOW_CDUM);
+  }
 
-  private _componentDidUpdate(oldProps: IProps, newProps: IProps): void {
-    const response = this.componentDidUpdate(oldProps, newProps);
+  private _componentDidUpdate(): void {
+    const response = this.componentDidUpdate();
     if (!response) {
       return;
     }
     this._render();
   }
 
-  componentDidUpdate(oldProps: IProps, newProps: IProps): boolean {
+  componentDidUpdate(): boolean {
     return true;
   }
 
   private _getChildrenPropsAndProps(propsAndChildren: IProps): {
     children: { [key: string]: Block };
     props: IProps;
-    lists: { [key: string]: any[] };
+    lists: { [key: string]: unknown[] };
   } {
     const children: { [key: string]: Block } = {};
     const props: IProps = {};
-    const lists: { [key: string]: any[] } = {};
+    const lists: { [key: string]: unknown[] } = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -112,8 +137,8 @@ export default class Block {
     const { attr = {} } = this.props;
 
     Object.entries(attr).forEach(([key, value]) => {
-      if (this._element) {
-        this._element.setAttribute(key, value as unknown as string);
+      if (this._element && typeof value === 'string') {
+        this._element.setAttribute(key, value);
       }
     });
   }
@@ -138,7 +163,7 @@ export default class Block {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
-    Object.entries(this.lists).forEach(([key, child]) => {
+    Object.entries(this.lists).forEach(([key]) => {
       propsAndStubs[key] = `<div data-id="__l_${_tmpId}"></div>`;
     });
 
@@ -151,19 +176,23 @@ export default class Block {
     Object.values(this.children).forEach((child) => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
       if (stub) {
-        // @ts-ignore
-        stub.replaceWith(child.getContent());
+        const content = child.getContent();
+        if (content) {
+          stub.replaceWith(content);
+        }
       }
     });
 
-    Object.entries(this.lists).forEach(([key, child]) => {
+    Object.entries(this.lists).forEach(([list]) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
-      child.forEach((item) => {
+      (list as unknown as unknown[]).forEach((item) => {
         if (item instanceof Block) {
-          // @ts-ignore
-          listCont.content.append(item.getContent());
+          const content = item.getContent();
+          if (content) {
+            listCont.content.append(content);
+          }
         } else {
           listCont.content.append(`${item}`);
         }
@@ -176,11 +205,12 @@ export default class Block {
 
     const newElement = fragment.content.firstElementChild as HTMLElement;
     if (this._element && newElement) {
+      this._removeEvents();
       this._element.replaceWith(newElement);
-    }
-    this._element = newElement;
-    this._addEvents();
-    this.addAttributes();
+  }
+  this._element = newElement as HTMLElement;
+  this._addEvents();
+  this.addAttributes();
   }
 
   render(): string {

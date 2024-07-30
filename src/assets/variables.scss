@@ -1,40 +1,30 @@
-$font-body: Inter,"Segoe UI","Roboto","Helvetica Neue", sans-serif;
-
+$font-body: inter,"Segoe UI","Roboto","Helvetica Neue",sans-serif;
 $font-weight-regular: 500;
 $font-weight-semibold: 600;
-
-$font-large: #{$font-weight-regular} 40px/40px #{$font-body};
-$font-big: #{$font-weight-regular} 20px/20px #{$font-body};
-$font-title: #{$font-weight-semibold} 16px/16px #{$font-body};
-$font-regular: #{$font-weight-regular} 13px/13px #{$font-body};
-$font-small: #{$font-weight-regular} 12px/12px #{$font-body};
-$font-micro: #{$font-weight-regular} 11px/11px #{$font-body};
-$font-nano: #{$font-weight-regular} 9px/9px #{$font-body};
-
+$font-large: #{$font-weight-regular} 40px / 40px #{$font-body};
+$font-big: #{$font-weight-regular} 20px / 20px #{$font-body};
+$font-title: #{$font-weight-semibold} 16px / 16px #{$font-body};
+$font-regular: #{$font-weight-regular} 13px / 13px #{$font-body};
+$font-small: #{$font-weight-regular} 12px / 12px #{$font-body};
+$font-micro: #{$font-weight-regular} 11px / 11px #{$font-body};
+$font-nano: #{$font-weight-regular} 9px / 9px #{$font-body};
 $text-bgcolor: #FFF;
 $text-color: #000;
 $text-light-color: #999;
-$text-red: #FF0000;
-
+$text-red: "#F00";
 $link-color: #ce1515;
 $title-color: #1E1E1E;
-
 $button-color: #FFF;
 $button-bgcolor: #{$link-color};
-
 $menu-button-color: #{$button-bgcolor};
 $menu-button-bgcolor: #F5F5F5;
-
-$menu-font: #{$font-weight-regular} 12px/14px #{$font-body};
+$menu-font: #{$font-weight-regular} 12px / 14px #{$font-body};
 $menu-bgcolor: #{$text-bgcolor};
-$menu-shadow: 0px 0px 6px #00000024;
-
+$menu-shadow: 0 0 6px #1E1E1E;
 $divider-line-color: #EAEAEA;
-
 $chat-list-bgcolor: #FBFBFB;
 $chat-list-current-bgcolor: #E4EDFD;
-
-$chat-message-font: #{$font-weight-regular} 12px/15px #{$font-body};
+$chat-message-font: #{$font-weight-regular} 12px / 15px #{$font-body};
 $chat-message-bgcolor: #F8F8F8;
 $chat-message-color: #1E1E1E;
 $chat-message-inverse-color: #FFF;
@@ -42,23 +32,18 @@ $chat-message-inverse-bgcolor: #52525280;
 $chat-message-my-bgcolor: #E4EDFD;
 $chat-message-my-color: #{$chat-message-color};
 $chat-message-my-time-color: #{$button-bgcolor};
-
 $dialog-bgcolor: #{$text-bgcolor};
 $dialog-shadow: #{$menu-shadow};
-
-$dialog-modal-overlay-bgcolor: #00000066;
+$dialog-modal-overlay-bgcolor: "#0006";
 $dialog-modal-content-shadow: #{$menu-shadow};
-$dialog-modal-title: #{$font-weight-regular} 15px/20px #{$font-body};
-
+$dialog-modal-title: #{$font-weight-regular} 15px / 20px #{$font-body};
 $gray-light-color: #EFEFEF;
-
 $background-color: #f0f0f0;
 $header-background-color: #333;
 $button-bgcolor: #d32222;
 $button-color: white;
 $divider-line-color: #ccc;
-$link-color: #00ff33;
-
+$link-color: "#0f3";
 $button-bgcolor: #007bff;
 $header-background-color: #343a40;
 $link-color: #007bff;
