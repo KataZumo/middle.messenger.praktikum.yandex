@@ -16,16 +16,16 @@ interface ProfilePageProps {
 export default class ProfilePage extends Block {
   constructor(props: ProfilePageProps) {
     super({
-      ...props,
+      props,
       profile: new ProfileInfoComponent({
-        name: props.name,
-        email: props.email,
-        loginName: props.loginName,
-        firstName: props.firstName,
-        secondName: props.secondName,
-        chatName: props.chatName,
-        phone: props.phone,
-        photoUrl: props.photoUrl,
+        name: props.name || "GROGI",
+        email: props.email || "qwerty@gmail.com",
+        loginName: props.loginName || "Grogi",
+        firstName: props.firstName || "LOLOLO",
+        secondName: props.secondName || "KEK",
+        chatName: props.chatName || "infinity",
+        phone: props.phone || "1-2-3-4-5-6",
+        photoUrl: props.photoUrl || "default-avatar-url",
       }),
     });
   }
@@ -41,3 +41,4 @@ export default class ProfilePage extends Block {
     </div>`;
   }
 }
+
