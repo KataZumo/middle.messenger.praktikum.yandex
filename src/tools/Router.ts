@@ -11,7 +11,7 @@ interface IRoute {
 
 class Router {
     private static __instance: Router;
-    private routes: any;
+    public routes: any;
     private history: any;
     private _currentRoute: any;
     private _rootQuery: any;
@@ -30,6 +30,13 @@ class Router {
         Router.__instance = this;
     }
 
+    public static getInstance(): Router {
+        if (!Router.__instance) {
+            throw new Error('Router is not initialized');
+        }
+        return Router.__instance;
+    }
+
     use(pathname: string, block: any): any {
         const route = new Route(pathname, block, { rootQuery: this._rootQuery });
         this.routes.push(route);
@@ -37,8 +44,8 @@ class Router {
     }
 
     start(): void {
-        window.onpopstate = () => {
-            this._onRoute(document.location.pathname);
+        window.onpopstate = (event) => {
+            this._onRoute(event.currentTarget.location.pathname);
         };
 
         this._onRoute(window.location.pathname);
@@ -46,7 +53,6 @@ class Router {
 
     private _onRoute(pathname: string): void {
         const route: IRoute | undefined = this.getRoute(pathname);
-        // console.log("🚀 ~ Router ~ _onRoute ~ route:", route)
         if (!route) {
             this.handleNotFound(); // Обработка 404
             return;

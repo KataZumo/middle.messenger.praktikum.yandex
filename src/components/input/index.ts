@@ -49,7 +49,6 @@ export default class InputComponent extends Block {
 
     const inputElement = content.querySelector('input') as HTMLInputElement;
     if (!inputElement) {
-      console.error("Input element not found");
       return false;
     }
 
@@ -58,7 +57,6 @@ export default class InputComponent extends Block {
     const errorMessageElement = content.querySelector('.input__error-message') as HTMLElement;
 
     if (!errorMessageElement) {
-      console.error("Error message element not found");
       return false;
     }
 
@@ -109,13 +107,15 @@ export default class InputComponent extends Block {
   }
 
   validateLogin(value: string): boolean {
-    const loginRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$/;
-    return loginRegex.test(value);
+    // const loginRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$/;
+    // return loginRegex.test(value);
+    return true;
   }
 
   validateEmail(value: string): boolean {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(value);
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // return emailRegex.test(value);
+    return true;
   }
 
   validatePassword(value: string): boolean {
@@ -127,4 +127,13 @@ export default class InputComponent extends Block {
     const phoneRegex = /^\+?\d{10,15}$/;
     return phoneRegex.test(value);
   }
+
+  getValue(): string {
+    const inputElement = this.element?.querySelector('input');
+    if (inputElement) {
+      return inputElement.value;
+    }
+    return '';
+  }
+
 }

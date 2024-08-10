@@ -4,6 +4,10 @@ import InputComponent from "../../components/input";
 import Link from "../../components/link";
 import "./login-page.scss";
 import Title from "../../components/title/title";
+import AuthAPI from "../../api/userAPI";
+import { host } from "../../api/api";
+import UserLoginController from "./UserLoginController";
+import Router from "../../tools/Router";
 
 interface LoginPageProps {
   title?: Title;
@@ -14,6 +18,8 @@ interface LoginPageProps {
   [key: string]: unknown;
 }
 export default class LoginPage extends Block {
+  private authAPI: AuthAPI;
+
   constructor(props: LoginPageProps = {}) {
     super({
       ...props,
@@ -21,10 +27,10 @@ export default class LoginPage extends Block {
         text: "Вход",
       }),
       usernameInput: new InputComponent({
-        type: "email",
+        type: "login",
         className: "input",
         onChange: (value: string) => {
-          console.log("Email:", value);
+          console.log("Login:", value);
         },
       }),
       passwordInput: new InputComponent({
@@ -51,13 +57,32 @@ export default class LoginPage extends Block {
         href: "/register",
       }),
     });
+
+    this.authAPI = new AuthAPI();
   }
+
 
   handleLoginClick(event: Event) {
     event.preventDefault();
-    history.pushState({}, "", "/chat");
-    window.dispatchEvent(new PopStateEvent("popstate"));
+
+    const login = (this.children.usernameInput as InputComponent).getValue();
+    const password = (this.children.passwordInput as InputComponent).getValue();
+
+    if (!login || !password) {
+      return;
+    }
+
+    this.authAPI.login({ login, password })
+      .then(user => {
+        localStorage.setItem('user', JSON.stringify(user));
+        const router = Router.getInstance(); 
+        router.go('/chat'); 
+      })
+      .catch(error => {
+        console.error('Signin error:', error);
+      });
   }
+
 
   render() {
     return `
@@ -77,3 +102,5 @@ export default class LoginPage extends Block {
     `;
   }
 }
+
+
