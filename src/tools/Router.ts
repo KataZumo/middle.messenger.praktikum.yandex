@@ -37,7 +37,11 @@ class Router {
         return Router.__instance;
     }
 
-    use(pathname: string, block: any): any {
+    use(pathname: string, block: any): any {    
+        if (typeof block !== 'function') {
+            throw new Error(`Block for route ${pathname} is not a valid class`);
+        }
+    
         const route = new Route(pathname, block, { rootQuery: this._rootQuery });
         this.routes.push(route);
         return this;

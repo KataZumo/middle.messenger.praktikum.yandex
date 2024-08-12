@@ -2,6 +2,7 @@ import "./chande-data-page.scss";
 import Block from "../../../tools/Block";
 import { Button } from "../../../components";
 import ProfileInfoChangeComponent from "../../../components/profile-info-change";
+import userApi from "../../../api/userApi";
 
 interface ChangeDataPageProps {
   name: string;
@@ -15,34 +16,41 @@ interface ChangeDataPageProps {
 }
 
 export default class ChangeDataPage extends Block {
+  private profileInfo: ProfileInfoChangeComponent;
+
   constructor(props: ChangeDataPageProps) {
+    // Создаем экземпляр ProfileInfoChangeComponent и сохраняем его в свойстве this.profileInfo
+    const profileInfo = new ProfileInfoChangeComponent({
+      name: props.name,
+      email: props.email,
+      loginName: props.loginName,
+      firstName: props.firstName,
+      secondName: props.secondName,
+      chatName: props.chatName,
+      phone: props.phone,
+      photoUrl: props.photoUrl,
+    });
+
     super({
       ...props,
-      profile: new ProfileInfoChangeComponent({
-        name: props.name,
-        email: props.email,
-        loginName: props.loginName,
-        firstName: props.firstName,
-        secondName: props.secondName,
-        chatName: props.chatName,
-        phone: props.phone,
-        photoUrl: props.photoUrl,
-      }),
+      profile: profileInfo,
       submitButton: new Button({
         text: "Сохранить",
         type: "submit",
         className: "change-button",
         events: {
-          click: (e: any) => this.handleLoginClick(e),
+          click: (e: any) => this.handleSaveClick(e),
         },
       }),
     });
+
+    this.profileInfo = profileInfo; // Сохраняем ссылку на компонент профиля
   }
 
-  handleLoginClick(event: Event) {
+  handleSaveClick(event: Event) {
     event.preventDefault();
-    history.pushState({}, "", "/profile");
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    // Вызов метода handleSaveClick из ProfileInfoChangeComponent
+    this.profileInfo.handleSaveClick(event);
   }
 
   override render() {

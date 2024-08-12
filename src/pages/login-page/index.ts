@@ -4,7 +4,7 @@ import InputComponent from "../../components/input";
 import Link from "../../components/link";
 import "./login-page.scss";
 import Title from "../../components/title/title";
-import AuthAPI from "../../api/userAPI";
+import AuthAPI from "../../api/authAPI";
 import { host } from "../../api/api";
 import UserLoginController from "./UserLoginController";
 import Router from "../../tools/Router";

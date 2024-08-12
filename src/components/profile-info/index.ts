@@ -4,6 +4,7 @@ import Title from "../title/title";
 import { Link } from "..";
 import ModalComponent from "../modal";
 import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
+import AuthAPI from "../../api/authAPI";
 
 interface ProfilePageProps {
   name: string;
@@ -18,6 +19,7 @@ interface ProfilePageProps {
 
 export default class ProfileInfoComponent extends Block {
   modal: ModalComponent;
+  authAPI: AuthAPI;
   
   constructor(props: ProfilePageProps) {
     const modal = new ModalComponent({
@@ -38,27 +40,27 @@ export default class ProfileInfoComponent extends Block {
       }),
       emailInfo: new Title({
         className: "profile-info__value",
-        text: props.email || "Unknown",
+        text: props.email || "GROGI@GROGI.ru",
       }),
       login: new Title({
         className: "profile-info__value",
-        text: props.loginName || "Unknown",
+        text: props.loginName || "GROGI",
       }),
       firstName: new Title({
         className: "profile-info__value",
-        text: props.firstName || "Unknown",
+        text: props.firstName || "GROGI",
       }),
       secondName: new Title({
         className: "profile-info__value",
-        text: props.secondName || "Unknown",
+        text: props.secondName || "GROGI",
       }),
       chatName: new Title({
         className: "profile-info__value",
-        text: props.chatName || "Unknown",
+        text: props.chatName || "GROGI",
       }),
       phone: new Title({
         className: "profile-info__value",
-        text: props.phone || "Unknown",
+        text: props.phone || "1234567890",
       }),
       changeData: new Link({
         text: "Изменить данные",
@@ -72,12 +74,25 @@ export default class ProfileInfoComponent extends Block {
       }),
       exitLink: new Link({
         text: "Выйти",
-        href: "/login",
+        href: "#",
         className: "chat-page__profile-link",
+        events: {
+          click: () => this.handleLogout(), 
+        },
       }),
     });
     
     this.modal = modal;
+    this.authAPI = new AuthAPI();
+  }
+
+
+  handleLogout() {
+    this.authAPI.logout().then(() => {
+      window.location.href = "/login";
+    }).catch((err) => {
+      console.error('Logout failed', err);
+    });
   }
 
   override render() {
@@ -120,6 +135,3 @@ export default class ProfileInfoComponent extends Block {
           </div>`;
   }
 }
-
-
-// <h1 class="profile-main-info__name">{{name}}</h1>

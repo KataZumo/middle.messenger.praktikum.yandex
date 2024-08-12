@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { host } from "../../api/api";
-import AuthAPI from "../../api/userAPI";
+import AuthAPI from "../../api/authAPI";
 import Route from "../../tools/Route";
 import { HttpRequest } from "../../api/HttpRequest";
 import LoginAPI from "./login-page.api";

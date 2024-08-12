@@ -1,5 +1,6 @@
 import { isEqual } from "../utils/isEqual";
 import { render } from "../utils/render";
+import { getState } from "./Store";
 
 interface RouteProps {
     rootQuery: string;
@@ -37,7 +38,11 @@ class Route {
 
     render(): void {
         if (!this._block) {
-            this._block = new this._blockClass();
+            if (typeof this._blockClass !== 'function') {
+                throw new Error(`Block class for ${this._pathname} is not a constructor`);
+            }
+            const state = getState(); // Получаем состояние из store
+            this._block = new this._blockClass(state.profile); // Передаем state.profile в конструктор
             render(this._props.rootQuery, this._block);
         } else {
             this._block.show();

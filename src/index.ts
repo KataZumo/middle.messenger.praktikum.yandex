@@ -7,6 +7,7 @@ import RegisterPage from "./pages/register-page";
 import ErrorPage from "./pages/error-404";
 import ErrorPage500 from "./pages/error-500";
 import Router from "./tools/Router";
+import { getState } from "./tools/Store";
 
 
 
@@ -19,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .use('/register', RegisterPage)
     .use('/change-password', ChangePasswordPage)
     .use('/chat', ChatPage)
-    .use('/profile', ProfilePage, { name: "John Doe", email: "john.doe@example.com" })
+    .use('/profile', ProfilePage)
     .use("/change-data", ChangeDataPage)
     .use("/error404", ErrorPage)
     .use("/error500", ErrorPage500)

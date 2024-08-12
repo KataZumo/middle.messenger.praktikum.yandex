@@ -3,6 +3,8 @@ import "./password-page.scss";
 import { Button } from "../../../components";
 import ProfilePhotoComponent from "../../../components/photo/ProfilePhotoComponent";
 import InputComponent from "../../../components/input";
+import Router from "../../../tools/Router";
+import userApi from "../../../api/userApi";
 
 interface ChangePasswordPageProps {
   oldPassword: string;
@@ -11,12 +13,15 @@ interface ChangePasswordPageProps {
 }
 
 export default class ChangePasswordPage extends Block {
+  private router: Router;
+
   constructor(props: ChangePasswordPageProps) {
     const profilePhoto = new ProfilePhotoComponent({
       avatar:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s",
       onClick: () => "",
     });
+
     super({
       ...props,
       profilePhoto,
@@ -26,7 +31,7 @@ export default class ChangePasswordPage extends Block {
         value: "",
         placeholder: "Введите старый пароль",
         onChange: (value: string) => {
-          console.log("Old Password:", value);
+          this.setProps({ oldPassword: value });
         },
       }),
       newPassword: new InputComponent({
@@ -35,7 +40,7 @@ export default class ChangePasswordPage extends Block {
         value: "",
         placeholder: "Новый пароль",
         onChange: (value: string) => {
-          console.log("New Password:", value);
+          this.setProps({ newPassword: value });
         },
       }),
       repeatPassword: new InputComponent({
@@ -44,7 +49,7 @@ export default class ChangePasswordPage extends Block {
         value: "",
         placeholder: "Повторите пароль",
         onChange: (value: string) => {
-          console.log("Repeat Password:", value);
+          this.setProps({ repeatPassword: value });
         },
       }),
       saveButton: new Button({
@@ -55,13 +60,47 @@ export default class ChangePasswordPage extends Block {
         },
       }),
     });
+
+    this.router = new Router();
   }
 
-  handleSaveClick(event: Event) {
+  validatePasswords(): boolean {
+    const { newPassword, repeatPassword } = this.props;
+
+    if (newPassword !== repeatPassword) {
+      console.error("Пароли не совпадают");
+      return false;
+    }
+
+    if (!newPassword || !repeatPassword) {
+      console.error("Пароли не должны быть пустыми");
+      return false;
+    }
+
+    return true;
+  }
+
+  async handleSaveClick(event: Event) {
     event.preventDefault();
-    history.pushState({}, "", "/profile");
-    window.dispatchEvent(new PopStateEvent("popstate"));
-    console.log("Пароль изменен");
+
+    if (!this.validatePasswords()) {
+      return;
+    }
+
+    const data: ChangePasswordPageProps = {
+      oldPassword: this.props.oldPassword,
+      newPassword: this.props.newPassword,
+    };
+
+    try {
+      await userApi.changePassword(data);
+      console.log("Пароль успешно изменен");
+
+      // Редирект на страницу профиля после успешного изменения пароля
+      this.router.go('/profile');
+    } catch (error) {
+      console.error("Ошибка при изменении пароля:", error);
+    }
   }
 
   override render() {

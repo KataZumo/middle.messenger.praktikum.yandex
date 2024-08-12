@@ -1,55 +1,54 @@
-import { BaseAPIData } from './api';
-import { BaseAPI } from './BaseAPI';
-import { HttpRequest } from './HttpRequest';
+import { BaseAPIData } from "./api";
 
-type SignupData = {
-    email: string;
-    password: string;
-    name: string;
-  };
-  
-  type SigninData = {
-    login: string;
-    password: string;
-  };
+export interface ChangePasswordData {
+  oldPassword: string
+  newPassword: string
+}
 
-type SignUpRequest ={
-    first_name: string
-    second_name: string
-    login: string
-    email: string
-    phone: string
-    password: string
+export interface User {
+  id: number
+  first_name: string
+  second_name: string
+  display_name: string | null
+  phone: string
+  login: string
+  avatar: string | null
+  email: string
+}
+
+export type UpdateProfileData = Omit<User, 'id' | 'avatar'>
+
+class UserAPI extends BaseAPIData {
+  constructor() {
+    super('user')
   }
-  
-  type UserData = {
-    id: string;
-    login: string;
-    name: string;
-    password: string;
-  };
-  
-  class AuthAPI extends BaseAPIData {
-    constructor() {
-      super('auth')
-    }
-  
-    login(data: SigninData) {
-      return this.http.post('/signin', data )
-    }
-  
-    signup(data: SignUpRequest) {
-      return this.http.post('/signup', data )
-    }
-  
-    getUser() {
-      return this.http.get('/user')
-    }
-  
-    logout() {
-      return this.http.post('/logout')
-    }
+
+  updateProfile(data: UpdateProfileData) {
+    return this.http.put('/profile', data )
   }
-  
-  export default AuthAPI;
-  
+
+    changePassword(data: ChangePasswordData) {
+    return this.http.post('/password', data )
+  }
+
+}
+
+export default new UserAPI
+
+
+
+  // changePassword(data: ChangePasswordData) {
+  //   return this.http.post('/password', { data })
+  // }
+
+  // changeAvatar(file: File) {
+  //   const formData = new FormData()
+  //   formData.append('avatar', file)
+  //   return this.http.put('/profile/avatar', {
+  //     data: formData,
+  //   })
+  // }
+
+    // searchUser(login: string) {
+  //   return this.http.post('/search', { data: { login } })
+  // }

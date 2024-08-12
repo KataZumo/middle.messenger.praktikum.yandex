@@ -91,13 +91,12 @@ export default class InputComponent extends Block {
     if (!isValid) {
       errorMessageElement.textContent = errorMessage;
       inputElement.classList.add('input__element--invalid');
-      console.error(`Validation failed for: ${type}`);
+      console.error(`валидация на прошла для: ${type}`);
       return false;
     }
 
     errorMessageElement.textContent = '';
     inputElement.classList.remove('input__element--invalid');
-    console.log("Validation passed successfully");
     return true;
   }
 
