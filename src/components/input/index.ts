@@ -43,7 +43,7 @@ export default class InputComponent extends Block {
   validate() {
     const content = this.getContent();
     if (!content) {
-      console.error("Content is null");
+      console.error("Поля не должны быть пустыми");
       return false;
     }
 
@@ -53,6 +53,7 @@ export default class InputComponent extends Block {
     }
 
     const value = inputElement.value;
+    console.log("🚀 ~ InputComponent ~ validate ~ value:", value)
     const type = inputElement.type;
     const errorMessageElement = content.querySelector('.input__error-message') as HTMLElement;
 
@@ -64,24 +65,31 @@ export default class InputComponent extends Block {
     let errorMessage = '';
     switch (type) {
       case "text":
+        // Начинается с заглавной буквы (латинской или кириллической).
+        // Содержит только буквы (и заглавные, и строчные) латинского или 
+        // кириллического алфавита и дефисы после первой заглавной буквы.
+        // Не содержит цифр, пробелов, специальных символов (кроме дефиса) и других нежелательных символов.
         isValid = this.validateText(value);
         errorMessage = isValid ? '' : 'Invalid text';
         break;
       case "login":
+        // Состоит из латинских букв (заглавных или строчных), цифр, подчеркиваний и дефисов.
+        // Имеет длину от 3 до 20 символов.
+        // Содержит хотя бы одну латинскую букву (строчную или заглавную).
         isValid = this.validateLogin(value);
-        errorMessage = isValid ? '' : 'Invalid login';
+        errorMessage = isValid ? '' : 'Не верный логин или пароль';
         break;
       case "email":
         isValid = this.validateEmail(value);
-        errorMessage = isValid ? '' : 'Invalid email';
+        errorMessage = isValid ? '' : 'Не верный emain';
         break;
       case "password":
         isValid = this.validatePassword(value);
-        errorMessage = isValid ? '' : 'Invalid password';
+        errorMessage = isValid ? '' : 'Не верный логин или пароль';
         break;
       case "phone":
         isValid = this.validatePhone(value);
-        errorMessage = isValid ? '' : 'Invalid phone';
+        errorMessage = isValid ? '' : 'Не верный набран номер телефона';
         break;
       default:
         console.error("Unknown validation type");
@@ -106,14 +114,14 @@ export default class InputComponent extends Block {
   }
 
   validateLogin(value: string): boolean {
-    // const loginRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$/;
-    // return loginRegex.test(value);
+    const loginRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$/;
+    return loginRegex.test(value);
     return true;
   }
 
   validateEmail(value: string): boolean {
-    // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // return emailRegex.test(value);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(value);
     return true;
   }
 

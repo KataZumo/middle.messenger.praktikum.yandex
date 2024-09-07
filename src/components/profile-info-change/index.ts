@@ -125,7 +125,7 @@ export default class ProfileInfoChangeComponent extends Block {
         secondName: user.second_name,
         chatName: user.display_name || '',
         phone: user.phone,
-        photoUrl: "https://example.com/default-avatar.png"
+        photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s"
       });
     } catch (error) {
       console.error('Ошибка при загрузке профиля:', error);

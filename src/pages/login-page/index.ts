@@ -4,9 +4,8 @@ import InputComponent from "../../components/input";
 import Link from "../../components/link";
 import "./login-page.scss";
 import Title from "../../components/title/title";
-import AuthAPI from "../../api/authAPI";
-import { host } from "../../api/api";
-import UserLoginController from "./UserLoginController";
+import { SigninData } from "../../api/type";
+import AuthController from "../../controlers/authControlers"
 import Router from "../../tools/Router";
 
 interface LoginPageProps {
@@ -17,8 +16,9 @@ interface LoginPageProps {
   registerLink?: Link;
   [key: string]: unknown;
 }
+
 export default class LoginPage extends Block {
-  private authAPI: AuthAPI;
+  private isUserAuthenticated: boolean = false;
 
   constructor(props: LoginPageProps = {}) {
     super({
@@ -48,8 +48,8 @@ export default class LoginPage extends Block {
           click: (event: Event) => {
             this.handleLoginClick(event);
             event.preventDefault();
-            console.log("Клик");
-          }}
+          }
+        }
       }),
       registerLink: new Link({
         text: "Нет аккаунта?",
@@ -58,31 +58,38 @@ export default class LoginPage extends Block {
       }),
     });
 
-    this.authAPI = new AuthAPI();
+    AuthController.getUser().then((user) => {
+      if (user) {
+        this.isUserAuthenticated = true;
+        const router = Router.getInstance();
+        router.go('/chat');
+      }
+    });
   }
-
+  
 
   handleLoginClick(event: Event) {
     event.preventDefault();
+
+    if (this.isUserAuthenticated) {
+      const router = Router.getInstance();
+      router.go('/chat');
+      return;
+    }
 
     const login = (this.children.usernameInput as InputComponent).getValue();
     const password = (this.children.passwordInput as InputComponent).getValue();
 
     if (!login || !password) {
+      console.error('Login and password are required.');
       return;
     }
 
-    this.authAPI.login({ login, password })
-      .then(user => {
-        localStorage.setItem('user', JSON.stringify(user));
-        const router = Router.getInstance(); 
-        router.go('/chat'); 
-      })
-      .catch(error => {
-        console.error('Signin error:', error);
-      });
+    const data: SigninData = { login, password };
+    AuthController.login(data)
+      .then(() => console.log('User logged in successfully'))
+      .catch(error => console.error('Login failed:', error));
   }
-
 
   render() {
     return `

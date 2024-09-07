@@ -88,7 +88,9 @@ export default class ChangePasswordPage extends Block {
     }
 
     const data: ChangePasswordPageProps = {
+      //@ts-ignore
       oldPassword: this.props.oldPassword,
+      //@ts-ignore
       newPassword: this.props.newPassword,
     };
 

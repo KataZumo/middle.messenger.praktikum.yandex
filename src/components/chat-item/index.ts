@@ -7,6 +7,7 @@ interface ChatItemProps {
   current?: boolean;
   name?: string;
   unread?: number;
+  id?: number;
 }
 
 export default class ChatItem extends Block {
@@ -17,23 +18,20 @@ export default class ChatItem extends Block {
   }
 
   render() {
+    const { name, avatar, message, unread, current } = this.props;
+
     return `
-      <div class="chat-item{{#if current}} chat-item--current{{/if}}">
+      <div class="chat-item ${current ? 'chat-item--current' : ''}">
         <div class="chat-item__avatar">
-          {{#if avatar}}
-            <img src="{{avatar}}" alt="Avatar">
-          {{else}}
-            <div class="chat-item__avatar-placeholder"></div>
-          {{/if}}
+          <img src="${avatar}" alt="Avatar" class="chat-item__avatar-image">
         </div>
         <div class="chat-item__details">
-          <div class="chat-item__name">{{name}}</div>
-          <div class="chat-item__message">{{message}}</div>
+          <div class="chat-item__name">${name}</div>
+          <div class="chat-item__message">${message}</div>
         </div>
-        {{#if unread}}
-          <div class="chat-item__unread">{{unread}}</div>
-        {{/if}}
-      </div>
-    `;
-  }
-}
+        // <div class="chat-item__unread">${unread ?? ''}</div>
+        </div>
+        `;
+      }
+    }
+    // <button class="chat-item__delete-button" data-chat-id="${this.props.id}">Удалить</button>

@@ -23,10 +23,10 @@ export default class ProfileInfoComponent extends Block {
   
   constructor(props: ProfilePageProps) {
     const modal = new ModalComponent({
-      onApply: () => console.log("File applied"),
+      onApply: () => console.log("Файл добавлен"),
     });
     const profilePhoto = new ProfilePhotoComponent({
-      avatar: props.photoUrl ,
+      avatar: props.photoUrl || `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s` ,
       onClick: () => modal.show(),
     });
     

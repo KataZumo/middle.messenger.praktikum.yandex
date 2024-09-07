@@ -4,14 +4,12 @@ import InputComponent from "../../components/input";
 import Link from "../../components/link";
 import "./register.scss";
 import Title from "../../components/title/title";
-import AuthAPI from "../../api/authAPI";
-import { host } from "../../api/api";
 import TextComponent from "../../components/text/text";
+import { SignUpRequest } from "../../api/type";
+import AuthController from "../../controlers/authControlers"
 import Router from "../../tools/Router";
 
 export default class RegisterPage extends Block {
-  private authAPI: AuthAPI;
-
   constructor(props: any = {}) {
     super({
       ...props,
@@ -89,7 +87,13 @@ export default class RegisterPage extends Block {
         className: 'error-message',
       }),
     });
-    this.authAPI = new AuthAPI();
+
+    AuthController.getUser().then((user) => {
+      if (user) {
+        const router = Router.getInstance();
+        router.go('/chat');
+      }
+    });
   }
 
   handleRegisterClick(event: Event) {
@@ -111,22 +115,19 @@ export default class RegisterPage extends Block {
       return;
     }
 
-    this.authAPI.signup({
+    const data: SignUpRequest = {
       first_name: firstName,
       second_name: secondName,
       login,
       email,
       password,
       phone
-    })
-      .then(user => {
-        localStorage.setItem('user', JSON.stringify(user));
+    };
 
-        const router = Router.getInstance();
-        router.go('/chat'); 
-      })
+    AuthController.register(data)
+      .then(() => console.log('пользователь успешно зхарегестрирован'))
       .catch(error => {
-        console.error('регистрация отвалилась:', error);
+        console.error('Ошибка при регистрации', error);
         (this.children.errorMessage as TextComponent).setText(error.message);
       });
   }
@@ -148,6 +149,7 @@ export default class RegisterPage extends Block {
             {{{loginLink}}}
           </div>
         </form>
+        {{{errorMessage}}}
       </div>
     `;
   }
