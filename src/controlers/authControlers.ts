@@ -1,6 +1,7 @@
 import AuthAPI from "../api/authAPI";
 import { SigninData, SignUpRequest, UserData } from "../api/type";
 import Router from "../tools/Router";
+import {store} from "../tools/Store"
 
 class AuthController {
     private api: AuthAPI;
@@ -42,17 +43,18 @@ class AuthController {
         }
       }
   
-      async getUser(): Promise<UserData | null> {
+      async getUser(): Promise<any | null> {
         try {
           const user = await this.api.getUser();
+    
           if (user) {
-            this.saveUserData(user);
+            this.saveUserData(user); 
             return user;
           } else {
             return null;
           }
         } catch (error) {
-          this.clearUserData();
+          this.clearUserData(); 
           return null;
         }
       }
@@ -61,6 +63,7 @@ class AuthController {
         try {
           const user = await this.getUser();
           if (user) {
+            console.log('Fetched full user data after registration/login:', user);
           }
         } catch (error) {
           console.error('Проблема с запросом данных при регистрации или авторизации', error);
@@ -76,12 +79,18 @@ class AuthController {
       }
     }
   
-    private saveUserData(user: UserData) {
-      localStorage.setItem('user', JSON.stringify(user));
-    }
+    private saveUserData(user: any) {
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          sessionStorage.setItem('user', JSON.stringify(user));
+        } else {
+          console.warn('Attempted to save null user data to localStorage');
+        }
+      }
 
     private clearUserData() {    
       localStorage.removeItem('user');
+      sessionStorage.removeItem('user');
     }
   
     getStoredUserData(): UserData | null {

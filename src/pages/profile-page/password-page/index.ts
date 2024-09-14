@@ -19,7 +19,7 @@ export default class ChangePasswordPage extends Block {
     const profilePhoto = new ProfilePhotoComponent({
       avatar:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s",
-      onClick: () => "",
+      onClick: () => "", // Нет необходимости в модальном окне для смены аватара в этом компоненте
     });
 
     super({
@@ -28,7 +28,7 @@ export default class ChangePasswordPage extends Block {
       oldPassword: new InputComponent({
         type: "password",
         className: "change-password-page__input",
-        value: "",
+        value: props.oldPassword || "",
         placeholder: "Введите старый пароль",
         onChange: (value: string) => {
           this.setProps({ oldPassword: value });
@@ -37,7 +37,7 @@ export default class ChangePasswordPage extends Block {
       newPassword: new InputComponent({
         type: "password",
         className: "change-password-page__input",
-        value: "",
+        value: props.newPassword || "",
         placeholder: "Новый пароль",
         onChange: (value: string) => {
           this.setProps({ newPassword: value });
@@ -46,7 +46,7 @@ export default class ChangePasswordPage extends Block {
       repeatPassword: new InputComponent({
         type: "password",
         className: "change-password-page__input",
-        value: "",
+        value: props.repeatPassword || "",
         placeholder: "Повторите пароль",
         onChange: (value: string) => {
           this.setProps({ repeatPassword: value });
@@ -87,10 +87,8 @@ export default class ChangePasswordPage extends Block {
       return;
     }
 
-    const data: ChangePasswordPageProps = {
-      //@ts-ignore
+    const data = {
       oldPassword: this.props.oldPassword,
-      //@ts-ignore
       newPassword: this.props.newPassword,
     };
 
@@ -128,3 +126,4 @@ export default class ChangePasswordPage extends Block {
     </div>`;
   }
 }
+

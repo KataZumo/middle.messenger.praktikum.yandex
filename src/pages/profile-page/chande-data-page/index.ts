@@ -19,7 +19,6 @@ export default class ChangeDataPage extends Block {
   private profileInfo: ProfileInfoChangeComponent;
 
   constructor(props: ChangeDataPageProps) {
-    // Создаем экземпляр ProfileInfoChangeComponent и сохраняем его в свойстве this.profileInfo
     const profileInfo = new ProfileInfoChangeComponent({
       name: props.name,
       email: props.email,

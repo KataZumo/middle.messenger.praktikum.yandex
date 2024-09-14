@@ -7,9 +7,6 @@ import RegisterPage from "./pages/register-page";
 import ErrorPage from "./pages/error-404";
 import ErrorPage500 from "./pages/error-500";
 import Router from "./tools/Router";
-import { getState } from "./tools/Store";
-
-
 
 export const appRouter = new Router("app");
 

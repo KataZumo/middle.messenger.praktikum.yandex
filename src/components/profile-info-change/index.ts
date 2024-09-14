@@ -3,7 +3,7 @@ import ModalComponent from "../modal";
 import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import InputComponent from "../input";
 import UserAPI, { UpdateProfileData } from "../../api/userApi";
-import { store } from "../../tools/Store";
+// import { store } from "../../tools/Store";
 import AuthAPI from "../../api/authAPI";
 import Router from "../../tools/Router";
 
@@ -16,6 +16,7 @@ interface UserProfile {
   phone: string;
   avatar?: string;
 }
+
 interface ProfileChangePageProps {
   name: string;
   email: string;
@@ -26,11 +27,11 @@ interface ProfileChangePageProps {
   phone: string;
   photoUrl: string;
 }
+
 export default class ProfileInfoChangeComponent extends Block {
   modal: ModalComponent;
   authAPI: AuthAPI;
   router: Router;
-
 
   constructor(props: ProfileChangePageProps) {
     const modal = new ModalComponent({
@@ -92,7 +93,6 @@ export default class ProfileInfoChangeComponent extends Block {
 
     this.modal = modal;
     this.authAPI = new AuthAPI();
-    store.subscribe(this.updateProfile.bind(this));
     this.router = new Router();
 
     this.loadUserProfile();
@@ -132,19 +132,6 @@ export default class ProfileInfoChangeComponent extends Block {
     }
   }
 
-  updateProfile(state: any) {
-    const { profile } = state;
-    this.setProps({
-      email: profile.email,
-      loginName: profile.loginName,
-      firstName: profile.firstName,
-      secondName: profile.secondName,
-      chatName: profile.chatName,
-      phone: profile.phone,
-      photoUrl: profile.photoUrl,
-    });
-  }
-
   async handleSaveClick(event: Event) {
     event.preventDefault();
 
@@ -158,28 +145,28 @@ export default class ProfileInfoChangeComponent extends Block {
     };
 
     try {
-      const updatedUser: UserProfile = await UserAPI.updateProfile(data);
+      const updatedUser: UserProfile = await UserAPI.updateProfile(data as any);
       console.log('Профиль успешно обновлен:', updatedUser);
 
-      // Обновление данных в сторе после успешного обновления профиля
-      store.updateProfile({
+      // Обновляем sessionStorage новыми данными пользователя
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+      // Обновляем состояние компонента с новыми данными
+      this.setProps({
         email: updatedUser.email,
         loginName: updatedUser.login,
         firstName: updatedUser.first_name,
         secondName: updatedUser.second_name,
-        chatName: updatedUser.display_name || '',
+        chatName: updatedUser.display_name,
         phone: updatedUser.phone,
-        photoUrl: updatedUser.avatar ? `${RESOURCES_URL}/${updatedUser.avatar}` : this.props.photoUrl
       });
 
       // Редирект на страницу профиля
       this.router.go('/profile');
-
     } catch (error) {
       console.error('Ошибка при обновлении профиля:', error);
     }
   }
-  
 
   override render() {
     return `<div class="profile-info">

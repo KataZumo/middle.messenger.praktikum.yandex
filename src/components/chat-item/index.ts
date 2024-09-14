@@ -8,13 +8,25 @@ interface ChatItemProps {
   name?: string;
   unread?: number;
   id?: number;
+  selected?: boolean; 
+  onSelect?: (id: number) => void;
 }
 
 export default class ChatItem extends Block {
   constructor(props: ChatItemProps) {
     super({
       ...props,
+      events: {
+        click: () => this.handleClick(),
+      },
     });
+  }
+
+  handleClick() {
+    console.log(`🚀 Клик по чату с ID: ${this.props.id}`);
+    if (this.props.events?.click) {
+      this.props.events.click();
+    }
   }
 
   render() {
@@ -29,9 +41,11 @@ export default class ChatItem extends Block {
           <div class="chat-item__name">${name}</div>
           <div class="chat-item__message">${message}</div>
         </div>
-        // <div class="chat-item__unread">${unread ?? ''}</div>
-        </div>
-        `;
-      }
-    }
+        <div class="chat-item__unread">${unread ?? ''}</div>
+      </div>
+    `;
+  }
+}
+
+
     // <button class="chat-item__delete-button" data-chat-id="${this.props.id}">Удалить</button>

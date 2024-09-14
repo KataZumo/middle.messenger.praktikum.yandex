@@ -87,9 +87,10 @@ class ChatsAPI extends BaseAPIData {
     }
   
     async deleteChat(chatId: number): Promise<any> {
-      return await this.http.delete(`/${chatId}`);
+      return await this.http.delete('/', {
+         chatId ,
+      });
     }
-  
     async getChatUsers(chatId: number): Promise<any> {
       return await this.http.get(`/${chatId}/users`);
     }

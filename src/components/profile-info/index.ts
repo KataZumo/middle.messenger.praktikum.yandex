@@ -36,31 +36,31 @@ export default class ProfileInfoComponent extends Block {
       profilePhoto,
       name: new Title({
         className: "profile-info__value",
-        text: props.name || "GROGI",
+        text: props.name 
       }),
       emailInfo: new Title({
         className: "profile-info__value",
-        text: props.email || "GROGI@GROGI.ru",
+        text: props.email
       }),
       login: new Title({
         className: "profile-info__value",
-        text: props.loginName || "GROGI",
+        text: props.loginName
       }),
       firstName: new Title({
         className: "profile-info__value",
-        text: props.firstName || "GROGI",
+        text: props.firstName
       }),
       secondName: new Title({
         className: "profile-info__value",
-        text: props.secondName || "GROGI",
+        text: props.secondName 
       }),
       chatName: new Title({
         className: "profile-info__value",
-        text: props.chatName || "GROGI",
+        text: props.chatName 
       }),
       phone: new Title({
         className: "profile-info__value",
-        text: props.phone || "1234567890",
+        text: props.phone
       }),
       changeData: new Link({
         text: "Изменить данные",
@@ -94,6 +94,7 @@ export default class ProfileInfoComponent extends Block {
       console.error('Logout failed', err);
     });
   }
+
 
   override render() {
     return `<div class="profile-page">

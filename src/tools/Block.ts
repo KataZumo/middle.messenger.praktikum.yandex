@@ -19,15 +19,10 @@ export default class Block {
   };
 
   private _element: HTMLElement | null = null;
-
   private _id: number = Math.floor(100000 + Math.random() * 900000);
-
   props: IProps;
-
   children: { [key: string]: Block };
-
   lists: { [key: string]: unknown[] }; // Типизируем lists как объект массивов
-
   private eventBus: () => EventBus;
 
   constructor(propsWithChildren: IProps = {}) {
@@ -44,22 +39,25 @@ export default class Block {
 
   private _addEvents(): void {
     const { events = {} } = this.props;
-    console.log(events);
+    console.log('Adding events:', events); // Логирование для отладки
     Object.keys(events).forEach((eventName) => {
       if (this._element) {
         this._element.addEventListener(eventName, events[eventName]);
       }
     });
   }
-
+  
+  
   private _removeEvents() {
     const { events = {} } = this.props;
+    console.log('Removing events:', events); // Логирование для отладки
     Object.entries(events).forEach(([eventName, eventListener]) => {
-        if (this._element) {
-            this._element.removeEventListener(eventName, eventListener);
-        }
+      if (this._element) {
+        this._element.removeEventListener(eventName, eventListener);
+      }
     });
-}
+  }
+  
 
   private _registerEvents(eventBus: EventBus): void {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));

@@ -38,6 +38,20 @@ export default class ChatPage extends Block {
           click: (event: Event) => this.handleDeleteChatClick(event),
         },
       }),
+      addUserButton: new Button({
+        text: 'Добавить пользователя',
+        className: 'button add-user-button',
+        events: {
+          click: (event: Event) => this.handleAddUserClick(event),
+        },
+      }),
+      removeUserButton: new Button({
+        text: 'Удалить пользователя',
+        className: 'button remove-user-button',
+        events: {
+          click: (event: Event) => this.handleRemoveUserClick(event),
+        },
+      }),
       chats: '',
     });
 
@@ -83,8 +97,10 @@ export default class ChatPage extends Block {
   }
 
   handleChatClick(chatId: number) {
+    console.log(`Чат с ID ${chatId} был выбран`);
     this.state.currentChatId = chatId;
-    this.setProps({ currentChatName: `Чат ${chatId}` }); // Обновите заголовок чата, если нужно
+    this.setProps({ currentChatName: `Чат ${chatId}` });
+    console.log(`Текущий выбранный чат: ${this.state.currentChatId}`);
   }
 
   handleCreateChatClick(event: Event) {
@@ -113,22 +129,85 @@ export default class ChatPage extends Block {
 
   handleDeleteChatClick(event: Event) {
     event.preventDefault();
-
-    const chatId = this.getCurrentChatId();
+    const chatId = prompt('Введите ID чата для удаления');
+  
     if (chatId) {
-      ChatsAPI.deleteChat(chatId)
-        .then(() => {
-          alert(`Чат с ID ${chatId} успешно удален!`);
-          this.state.currentChatId = null; // Сброс текущего чата после удаления
-          this.initChats(); // Обновляем список чатов после удаления
-        })
-        .catch(error => {
-          console.error('Ошибка при удалении чата:', error);
-        });
+      const numericChatId = parseInt(chatId, 10);
+      if (!isNaN(numericChatId)) {
+        ChatsAPI.deleteChat(numericChatId)
+          .then(() => {
+            alert(`Чат с ID ${numericChatId} успешно удален!`);
+            this.state.currentChatId = null;
+            this.initChats();
+          })
+          .catch(error => {
+            console.error('Ошибка при удалении чата:', error);
+          });
+      } else {
+        alert('Неверный формат ID чата.');
+      }
     } else {
-      alert('Не выбран чат для удаления');
+      alert('ID чата не был введен.');
     }
   }
+
+  handleAddUserClick(event: Event) {
+    event.preventDefault();
+
+    const chatIdInput = prompt('Введите номер чата для добавления пользователя');
+    const chatId = parseInt(chatIdInput || '', 10);
+
+    if (!chatId || isNaN(chatId)) {
+      alert('Некорректный номер чата');
+      return;
+    }
+
+    const userIdInput = prompt('Введите ID пользователя для добавления');
+    const userId = parseInt(userIdInput || '', 10);
+
+    if (!userId || isNaN(userId)) {
+      alert('Некорректный ID пользователя');
+      return;
+    }
+
+    ChatsAPI.addUserToChat({ users: [userId], chatId })
+      .then(response => {
+        alert(`Пользователь с ID ${userId} успешно добавлен в чат с ID ${chatId}`);
+        console.log('Ответ сервера:', response);
+      })
+      .catch(error => {
+        console.error('Ошибка при добавлении пользователя:', error);
+      });
+  }
+
+  handleRemoveUserClick(event: Event) {
+    event.preventDefault();
+
+    const chatIdInput = prompt('Введите номер чата для удаления пользователя');
+    const chatId = parseInt(chatIdInput || '', 10);
+
+    if (!chatId || isNaN(chatId)) {
+      alert('Некорректный номер чата');
+      return;
+    }
+
+    const userIdInput = prompt('Введите ID пользователя для удаления');
+    const userId = parseInt(userIdInput || '', 10);
+
+    if (!userId || isNaN(userId)) {
+      alert('Некорректный ID пользователя');
+      return;
+    }
+
+    ChatsAPI.removeUserFromChat({ users: [userId], chatId })
+      .then(() => {
+        alert(`Пользователь с ID ${userId} успешно удалён из чата с ID ${chatId}`);
+      })
+      .catch(error => {
+        console.error('Ошибка при удалении пользователя:', error);
+      });
+  }
+
 
   render(): string {
     return `
@@ -139,6 +218,7 @@ export default class ChatPage extends Block {
             {{{createChatButton}}}
             {{{deleteChatButton}}}
             {{{addUserButton}}}
+            {{{removeUserButton}}}
             <input type="text" placeholder="Поиск" class="chat-page__search-input"/>
           </div>
           <div class="chat-page__chats">
@@ -160,68 +240,3 @@ export default class ChatPage extends Block {
     `;
   }
 }
-
-
-
-
-// async handleDeleteChatClick(event: Event) {
-//   event.preventDefault();
-
-//   const chatIdString = prompt('Введите ID чата, который хотите удалить');
-//   const chatId = chatIdString ? parseInt(chatIdString, 10) : null;
-
-//   if (chatId !== null && !isNaN(chatId)) {
-//       const confirmation = confirm(`Вы уверены, что хотите удалить чат с ID ${chatId}?`);
-
-//       if (confirmation) {
-//           try {
-//               await ChatsAPI.deleteChatWithData({ chatId });
-//               alert(`Чат с ID ${chatId} успешно удален!`);
-//               this.initChats(); // Обновляем список чатов после удаления
-//           } catch (error) {
-//               console.error('Ошибка при удалении чата:', error);
-//               alert('Произошла ошибка при удалении чата. Попробуйте снова.');
-//           }
-//       }
-//   } else {
-//       alert('Некорректный ID чата. Попробуйте снова.');
-//   }
-// }
-
-// async handleAddUserToChatClick(event: Event) {
-//   event.preventDefault();
-
-//   const userIdString = prompt('Введите ID пользователя, которого хотите добавить');
-//   const chatIdString = prompt('Введите ID чата, в который хотите добавить пользователя');
-//   const userId = userIdString ? parseInt(userIdString, 10) : null;
-//   const chatId = chatIdString ? parseInt(chatIdString, 10) : null;
-
-//   if (userId !== null && !isNaN(userId) && chatId !== null && !isNaN(chatId)) {
-//     try {
-//       await ChatsAPI.addUsersToChat({ users: [userId], chatId });
-//       alert(`Пользователь с ID ${userId} успешно добавлен в чат с ID ${chatId}!`);
-//       this.initChats(); // Если необходимо, обновляем список чатов
-//     } catch (error) {
-//       console.error('Ошибка при добавлении пользователя в чат:', error);
-//       alert('Произошла ошибка при добавлении пользователя в чат. Попробуйте снова.');
-//     }
-//   } else {
-//     alert('Некорректные ID пользователя или чата. Попробуйте снова.');
-//   }
-// }
-
-
-// deleteChatButton: new Button({
-//   text: 'Удалить чат',
-//   className: 'button create-chat-button',
-//   events: {
-//     click: (event: Event) => this.handleDeleteChatClick(event),
-//   },
-// }),
-// addUserButton: new Button({
-//   text: 'Добавить пользователя',
-//   className: 'button add-user-button',
-//   events: {
-//     click: (event: Event) => this.handleAddUserToChatClick(event),
-//   },
-// }),
