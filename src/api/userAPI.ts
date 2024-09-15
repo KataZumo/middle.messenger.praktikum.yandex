@@ -28,18 +28,20 @@ class UserAPI extends BaseAPIData {
     changePassword(data: ChangePasswordData) {
     return this.http.put('/password', data )
   }
-  changeAvatar(formData: FormData) {
-    const options = {
+  async changeAvatar(formData: FormData): Promise<any> {
+    const options: RequestInit = {
       credentials: 'include',
       mode: 'cors',
+      method: 'PUT',
+      body: formData,
     };
   
     const changeAvatarUrl = 'https://ya-praktikum.tech/api/v2/user/profile/avatar';
   
     return fetch(changeAvatarUrl, {
-      // method: 'PUT',
-      // body: formData,
-      // ...options,
+      method: 'PUT',
+      body: formData,
+      ...options,
     })
       .then(response => {
         if (!response.ok) {

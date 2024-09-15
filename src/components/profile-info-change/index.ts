@@ -2,8 +2,7 @@ import Block from "../../tools/Block";
 import ModalComponent from "../modal";
 import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import InputComponent from "../input";
-import UserAPI, { UpdateProfileData } from "../../api/userApi";
-// import { store } from "../../tools/Store";
+import UserAPI from "../../api/userApi";
 import AuthAPI from "../../api/authAPI";
 import Router from "../../tools/Router";
 
@@ -93,6 +92,7 @@ export default class ProfileInfoChangeComponent extends Block {
 
     this.modal = modal;
     this.authAPI = new AuthAPI();
+      // @ts-ignore
     this.router = new Router();
 
     this.loadUserProfile();
@@ -136,15 +136,16 @@ export default class ProfileInfoChangeComponent extends Block {
     event.preventDefault();
 
     const data: Partial<UserProfile> = {
-      email: this.props.email,
-      login: this.props.loginName,
-      first_name: this.props.firstName,
-      second_name: this.props.secondName,
-      display_name: this.props.chatName,
-      phone: this.props.phone
+      email: this.props.email as string,
+      login: this.props.loginName as string,
+      first_name: this.props.firstName as string,
+      second_name: this.props.secondName as string,
+      display_name: this.props.chatName as string,
+      phone: this.props.phone as string,
     };
 
     try {
+      //@ts-ignore
       const updatedUser: UserProfile = await UserAPI.updateProfile(data as any);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 

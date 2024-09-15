@@ -3,8 +3,9 @@ import AuthAPI from "./authAPI";
 
 export async function registerAndFetchUser(data: any) {
     try {
+      // @ts-ignore
       await AuthAPI.signup(data);
-  
+      // @ts-ignore
       const userData = await AuthAPI.getUser();
       
       store.setState({

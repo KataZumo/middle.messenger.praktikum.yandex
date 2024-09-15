@@ -23,6 +23,4 @@ import { SigninData, SignUpRequest } from './type';
     }
   }
 
-  const authAPI = new AuthAPI();
-
-  export default authAPI;
+  export default AuthAPI
