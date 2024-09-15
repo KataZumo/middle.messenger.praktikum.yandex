@@ -53,7 +53,6 @@
     "unit-no-unknown": null,
     "property-no-unknown": null,
     "selector-pseudo-class-no-unknown": null,
-    "files.insertFinalNewline": true
   }
 }
 
