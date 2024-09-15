@@ -6,7 +6,6 @@
   ],
   "plugins": ["stylelint-scss"],
   "rules": {
-    "eol-last": ["error", "always"],
     "at-rule-no-unknown": [
       true,
       {
