@@ -69,5 +69,3 @@ class ChatsAPI extends BaseAPIData {
 }
   
 export default new ChatsAPI;
-  
-  
