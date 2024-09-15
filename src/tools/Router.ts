@@ -2,7 +2,7 @@ import Route from "./Route";
 
 interface IRoute {
     pathname: string;
-    block: any; // Лучше уточнить тип блока
+    block: any;
     options: { rootQuery: string };
     match(pathname: string): boolean;
     leave(): void;
@@ -49,8 +49,7 @@ class Router {
 
     start(): void {
         window.onpopstate = (event) => {
-            // @ts-expect-error
-            this._onRoute(event.currentTarget.location.pathname);
+            this._onRoute(event.currentTarget?.location.pathname);
         };
 
         this._onRoute(window.location.pathname);
@@ -59,7 +58,7 @@ class Router {
     private _onRoute(pathname: string): void {
         const route: IRoute | undefined = this.getRoute(pathname);
         if (!route) {
-            this.handleNotFound(); // Обработка 404
+            this.handleNotFound();
             return;
         }
 
