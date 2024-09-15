@@ -1,4 +1,5 @@
 interface ProfileState {
+  name?: string
   email: string;
   loginName: string;
   firstName: string;

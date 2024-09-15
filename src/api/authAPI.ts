@@ -18,8 +18,11 @@ import { SigninData, SignUpRequest } from './type';
     }
   
     async logout(): Promise<any>  {
+      // @ts-ignore
       return await this.http.post('/logout')
     }
   }
 
-  export default AuthAPI
+  const authAPI = new AuthAPI();
+
+  export default authAPI;
