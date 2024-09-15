@@ -4,13 +4,12 @@ import Router from '../tools/Router';
 class ChatsController {
   private api: ChatsAPI;
   private router: Router;
+
   constructor() {
     this.api = new ChatsAPI;
     this.router = Router.getInstance(); 
   }
-  /**
-   * Получение списка чатов.
-   */
+
   async getChats(): Promise<void> {
     try {
       const chats = await this.api.getChats();
@@ -20,6 +19,7 @@ class ChatsController {
       alert('Не удалось загрузить чаты');
     }
   }
+  
   async createChat(title: string): Promise<void> {
     try {
       const chat = await this.api.createChat({ title });
