@@ -26,5 +26,5 @@ import { SigninData, SignUpRequest } from './type';
     }
   }
   
-  export default AuthAPI;
+  export default AuthAPI
   

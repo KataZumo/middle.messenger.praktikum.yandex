@@ -14,7 +14,7 @@ interface AppState {
 
 class Store {
   private state: AppState;
-  private listeners: Function[] = [];
+  private listeners: any[] = [];
 
   constructor(initialState: AppState) {
     this.state = initialState;
@@ -41,11 +41,11 @@ class Store {
     });
   }
 
-  subscribe(listener: Function): void {
+  subscribe(listener: any): void {
     this.listeners.push(listener);
   }
 
-  unsubscribe(listener: Function): void {
+  unsubscribe(listener: any): void {
     this.listeners = this.listeners.filter(l => l !== listener);
   }
 

@@ -5,7 +5,7 @@ class ChatWebSocket {
     private userId: number;
     private chatId: number;
     private token: string;
-    private handlers: { [key: string]: Function[] } = {};
+    private handlers: { [key: string]: any[] } = {};
     private isConnected: boolean = false;
     private messageQueue: string[] = [];
 
@@ -62,7 +62,7 @@ class ChatWebSocket {
         }
     }
 
-    public on(type: string, handler: Function) {
+    public on(type: string, handler: any) {
         if (!this.handlers[type]) {
             this.handlers[type] = [];
         }
