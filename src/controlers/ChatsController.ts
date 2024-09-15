@@ -1,16 +1,13 @@
 import ChatsAPI from '../api/сhatsAPI';
 import Router from '../tools/Router';
 
-
 class ChatsController {
   private api: ChatsAPI;
   private router: Router;
-
   constructor() {
     this.api = new ChatsAPI;
     this.router = Router.getInstance(); 
   }
-
   /**
    * Получение списка чатов.
    */
