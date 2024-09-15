@@ -1,9 +1,6 @@
 import { BaseAPIData } from './api';
 import { SigninData, SignUpRequest } from './type';
-
-
-  
-  class AuthAPI extends BaseAPIData {
+    class AuthAPI extends BaseAPIData {
     constructor() {
       super('auth')
     }
@@ -14,7 +11,6 @@ import { SigninData, SignUpRequest } from './type';
   
     async signup(data: SignUpRequest): Promise<any>  {
      return  await this.http.post('/signup', data )
-
     }
   
     async getUser(): Promise<any> {
@@ -25,5 +21,5 @@ import { SigninData, SignUpRequest } from './type';
       return await this.http.post('/logout')
     }
   }
-  
+
   export default AuthAPI
