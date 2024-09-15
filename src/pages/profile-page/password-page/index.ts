@@ -19,7 +19,7 @@ export default class ChangePasswordPage extends Block {
     const profilePhoto = new ProfilePhotoComponent({
       avatar:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s",
-      onClick: () => "", // Нет необходимости в модальном окне для смены аватара в этом компоненте
+      onClick: () => "", 
     });
 
     super({
@@ -93,10 +93,9 @@ export default class ChangePasswordPage extends Block {
     };
 
     try {
-      await userApi.changePassword(data);
+      await userApi.changePassword(data as any);
       console.log("Пароль успешно изменен");
 
-      // Редирект на страницу профиля после успешного изменения пароля
       this.router.go('/profile');
     } catch (error) {
       console.error("Ошибка при изменении пароля:", error);

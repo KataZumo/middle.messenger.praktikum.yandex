@@ -6,14 +6,13 @@ interface ModalComponentProps {
   events?: {
     click?: (event: Event) => void;
   };
-  onApply?: () => void; // Коллбек для действия "Применить"
+  onApply?: () => void; 
   [key: string]: unknown;
 }
 
 export default class ModalComponent extends Block {
   private statusMessage: HTMLElement;
-  private previewImage: HTMLImageElement; // Элемент для предварительного просмотра изображения
-
+  private previewImage: HTMLImageElement; 
   constructor(props: ModalComponentProps) {
     super({
       ...props,
@@ -25,112 +24,81 @@ export default class ModalComponent extends Block {
     this.statusMessage = document.createElement('p');
     this.statusMessage.className = 'modal__status-message';
 
-    this.previewImage = document.createElement('img'); // Создаем элемент для предварительного просмотра
+    this.previewImage = document.createElement('img'); 
     this.previewImage.className = 'modal__preview-image';
-    this.previewImage.style.display = 'none'; // Скрываем, пока не выбран файл
-
-    console.log('ModalComponent initialized'); // Лог инициализации компонента
+    this.previewImage.style.display = 'none';
   }
 
   handleClick(event: Event) {
     const target = event.target as HTMLElement;
 
     if (target.classList.contains('modal__close-button')) {
-      console.log('Close button clicked'); // Лог клика по кнопке закрытия
       this.hide();
-    } else if (target.classList.contains('modal__apply-button')) {
-      console.log('Apply button clicked'); // Лог клика по кнопке "Применить"
-      this.handleApplyClick(); // Обработчик нажатия кнопки "Применить"
+      this.handleApplyClick(); 
     }
   }
 
   async handleApplyClick() {
-    console.log('handleApplyClick called'); // Лог вызова метода handleApplyClick
-  
     const fileInputElement = this.element.querySelector('#file-input') as HTMLInputElement;
     if (!fileInputElement) {
-      console.error('File input element not found');
       return;
     }
   
     if (fileInputElement.files && fileInputElement.files[0]) {
       const file = fileInputElement.files[0];
       const formData = new FormData();
-      formData.append('avatar', file); // Важно использовать ключ 'avatar' согласно Swagger
-  
-      console.log('Sending FormData to server:', formData); // Лог перед отправкой
-  
+      formData.append('avatar', file);
       try {
-        // Отправляем запрос на изменение аватарки через API
-        const updatedUser = await UserAPI.changeAvatar(formData); // Передаем formData напрямую
-        console.log('Аватарка успешно обновлена', updatedUser); // Лог успешного обновления
-  
-        // Обновляем avatar в sessionStorage
+        const updatedUser = await UserAPI.changeAvatar(formData);
         const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-        user.avatar = updatedUser.avatar; // Обновляем путь к новой аватарке
+        user.avatar = updatedUser.avatar; 
         sessionStorage.setItem('user', JSON.stringify(user));
-        console.log('sessionStorage updated:', user); // Лог обновленного sessionStorage
-  
-        // Обновляем компонент новой аватаркой
-        const newAvatarUrl = `https://ya-praktikum.tech/api/v2/resources${updatedUser.avatar}`; // Используем правильный путь с базовым URL
+        const newAvatarUrl = `https://ya-praktikum.tech/api/v2/resources${updatedUser.avatar}`; 
         this.showStatusMessage('Аватарка успешно обновлена!');
   
         if (this.props.onApply) {
-          console.log('onApply callback called'); // Лог вызова коллбека onApply
-          this.props.onApply(); // Вызов callback, чтобы обновить внешний компонент
+          this.props.onApply(); 
         }
-  
         this.hide();
       } catch (error: any) {
-        console.error('Ошибка при загрузке аватарки:', error.message); // Лог ошибки при загрузке
         this.showStatusMessage('Ошибка при загрузке аватарки.');
       }
     } else {
-      console.log('No file selected'); // Лог, если файл не выбран
       this.showStatusMessage('Пожалуйста, выберите файл');
     }
   }
   
 
   updateUserProfile(updatedUser: any) {
-    console.log('Аватарка успешно обновлена', updatedUser); // Лог успешного обновления
-
-    // Обновляем avatar в sessionStorage
     const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-    user.avatar = updatedUser.avatar; // Обновляем путь к новой аватарке
+    user.avatar = updatedUser.avatar; 
     sessionStorage.setItem('user', JSON.stringify(user));
-    console.log('sessionStorage updated:', user); // Лог обновленного sessionStorage
 
-    // Обновляем компонент новой аватаркой
-    const newAvatarUrl = `https://ya-praktikum.tech/api/v2/resources${updatedUser.avatar}`; // Используем правильный путь с базовым URL
+    const newAvatarUrl = `https://ya-praktikum.tech/api/v2/resources${updatedUser.avatar}`;
     this.showStatusMessage('Аватарка успешно обновлена!');
 
     if (this.props.onApply) {
-      console.log('onApply callback called'); // Лог вызова коллбека onApply
-      this.props.onApply(); // Вызов callback, чтобы обновить внешний компонент
+      this.props.onApply(); 
     }
 
     this.hide();
   }
-
   showStatusMessage(message: string) {
     const statusMessageElement = this.element.querySelector('#status-message') as HTMLElement;
     statusMessageElement.textContent = message;
-    console.log('Status message shown:', message); // Лог отображаемого сообщения о статусе
   }
 
   handleFileSelection(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Создаем временный URL для предварительного просмотра
-      this.previewImage.src = imageUrl; // Обновляем атрибут src для предварительного просмотра
-      this.previewImage.style.display = 'block'; // Показываем изображение
-      console.log('Preview image updated:', imageUrl); // Лог обновления превью
+      const imageUrl = URL.createObjectURL(file); 
+      this.previewImage.src = imageUrl;
+      this.previewImage.style.display = 'block'; 
     }
   }
 
   override render() {
-    // После рендеринга назначаем обработчик события для выбора файла
+
     setTimeout(() => {
       const fileInput = this.element.querySelector('#file-input') as HTMLInputElement;
       if (fileInput) {
@@ -152,12 +120,10 @@ export default class ModalComponent extends Block {
   }
 
   show() {
-    console.log('Modal shown'); // Лог открытия модального окна
     this.element.style.display = 'block';
   }
 
   hide() {
-    console.log('Modal hidden'); // Лог закрытия модального окна
     this.element.style.display = 'none';
   }
 }

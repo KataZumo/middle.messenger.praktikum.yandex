@@ -22,7 +22,7 @@ export default class Block {
   private _id: number = Math.floor(100000 + Math.random() * 900000);
   props: IProps;
   children: { [key: string]: Block };
-  lists: { [key: string]: unknown[] }; // Типизируем lists как объект массивов
+  lists: { [key: string]: unknown[] }; 
   private eventBus: () => EventBus;
 
   constructor(propsWithChildren: IProps = {}) {
@@ -39,7 +39,7 @@ export default class Block {
 
   private _addEvents(): void {
     const { events = {} } = this.props;
-    console.log('Adding events:', events); // Логирование для отладки
+    console.log('Adding events:', events); 
     Object.keys(events).forEach((eventName) => {
       if (this._element) {
         this._element.addEventListener(eventName, events[eventName]);
@@ -50,7 +50,7 @@ export default class Block {
   
   private _removeEvents() {
     const { events = {} } = this.props;
-    console.log('Removing events:', events); // Логирование для отладки
+    console.log('Removing events:', events); 
     Object.entries(events).forEach(([eventName, eventListener]) => {
       if (this._element) {
         this._element.removeEventListener(eventName, eventListener);

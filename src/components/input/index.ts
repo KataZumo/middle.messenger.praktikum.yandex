@@ -53,7 +53,6 @@ export default class InputComponent extends Block {
     }
 
     const value = inputElement.value;
-    console.log("🚀 ~ InputComponent ~ validate ~ value:", value)
     const type = inputElement.type;
     const errorMessageElement = content.querySelector('.input__error-message') as HTMLElement;
 

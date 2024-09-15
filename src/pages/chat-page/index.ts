@@ -5,6 +5,8 @@ import "./chat-page.scss";
 import ChatsAPI from "../../api/сhatsAPI"
 import { Button } from "../../components";
 import сhatsAPI from "../../api/сhatsAPI";
+import ChatWebSocket from "../../tools/ChatWebSocket";
+import { getUserData } from "../../utils/HOC";
 interface ChatPageProps {
   currentChatName?: string;
   chats?: Array<ChatItem>;
@@ -12,11 +14,13 @@ interface ChatPageProps {
 interface ChatPageState {
   currentChatId: number | null;
 }
-
 export default class ChatPage extends Block {
   private state: ChatPageState;
+  private webSocket: ChatWebSocket | null = null;
 
   constructor(props: ChatPageProps = {}) {
+    console.log('ChatPage Props:', props);
+
     super({
       ...props,
       profileLink: new Link({
@@ -52,6 +56,20 @@ export default class ChatPage extends Block {
           click: (event: Event) => this.handleRemoveUserClick(event),
         },
       }),
+      selectChatButton: new Button({
+        text: 'Выбрать чат',
+        className: 'button select-chat-button',
+        events: {
+          click: (event: Event) => this.handleSelectChatClick(event),
+        },
+      }),
+      sendMessage: new Button({
+        text: 'Отправить',
+        className: 'button send-message-button',
+        events: {
+          click: (event: Event) => this.handleSendMessageClick(event),
+        },
+      }),
       chats: '',
     });
 
@@ -61,13 +79,14 @@ export default class ChatPage extends Block {
 
     this.initChats();
   }
+  
 
   async initChats() {
+    
     try {
       const chats = await ChatsAPI.getChats();
-      console.log("🚀 ~ ChatPage ~ initChats ~ chats:", chats)
       if (chats.length > 0) {
-        const chatItems = chats.map(chat => {
+        const chatItems = chats.map((chat: any) => {
           const chatItem = new ChatItem({
             id: chat.id,
             name: chat.title,
@@ -75,9 +94,6 @@ export default class ChatPage extends Block {
             avatar: chat.avatar,
             unread: chat.unreadMessages,
             current: false,
-            events: {
-              click: () => this.handleChatClick(chat.id),
-            },
           }).render();
           return chatItem;
         });
@@ -87,7 +103,6 @@ export default class ChatPage extends Block {
         this.setProps({ chats: '<p>Нет доступных чатов</p>' });
       }
     } catch (error) {
-      console.error('Ошибка при получении чатов:', error);
       this.setProps({ chats: '<p>Ошибка при загрузке чатов</p>' });
     }
   }
@@ -96,31 +111,75 @@ export default class ChatPage extends Block {
     return this.state.currentChatId;
   }
 
-  handleChatClick(chatId: number) {
-    console.log(`Чат с ID ${chatId} был выбран`);
-    this.state.currentChatId = chatId;
-    this.setProps({ currentChatName: `Чат ${chatId}` });
-    console.log(`Текущий выбранный чат: ${this.state.currentChatId}`);
-  }
+  async handleSelectChatClick(event: Event) {
+    event.preventDefault();
+    const chatIdInput = prompt('Введите ID чата для подключения');
+    const chatId = parseInt(chatIdInput || '', 10);
+    const data = getUserData()?.id as number
+
+
+    if (isNaN(chatId) || chatId <= 0) {
+        alert('Некорректный ID чата');
+        console.error('Некорректный ID чата:', chatIdInput);
+        return;
+    }
+    console.log('Выбранный chatId:', chatId);
+    console.log('Текущий userId:', data);
+
+    try {
+        const response = await ChatsAPI.getChatToken(chatId);
+        const token = response.token;
+        if (!token) {
+            throw new Error('Токен чата не получен');
+        }
+
+        console.log('Токен чата:', token);
+
+
+        if (this.webSocket) {
+            this.webSocket.close();
+        }
+
+        this.webSocket = new ChatWebSocket(data, chatId, token);
+
+        this.webSocket.on('message', (data: any) => {
+            console.log('Новое сообщение:', data);
+            this.addMessageToUI(data);
+        });
+
+
+        this.webSocket.on('notification', (data: any) => {
+            console.log("🚀 ~ ChatPage ~ this.webSocket.on ~ data:", data)
+            console.log('Уведомление:', data);
+        });
+
+
+        this.state.currentChatId = chatId;
+        this.setProps({ currentChatName: `Чат ${chatId}` });
+    } catch (error: any) {
+        console.error('Ошибка при получении токена чата:', error);
+        alert('Не удалось подключиться к чату');
+    }
+}
+
 
   handleCreateChatClick(event: Event) {
     event.preventDefault();
-
     const title = prompt('Введите название нового чата');
-
     if (title) {
       ChatsAPI.createChat({ title })
         .then((chat) => {
           if (chat && chat.id) {
             const chatTitle = chat.title ? chat.title : 'Без названия';
             alert(`Чат "${chatTitle}" успешно создан с ID ${chat.id}!`);
-            this.initChats(); // Обновляем список чатов после создания нового
+            this.initChats();
           } else {
             alert('Чат создан, но его ID не получен.');
           }
         })
         .catch(error => {
-          console.error('Ошибка при создании чата:', error);
+    
+          alert('Не удалось создать чат');
         });
     } else {
       alert('Название чата не может быть пустым');
@@ -130,7 +189,6 @@ export default class ChatPage extends Block {
   handleDeleteChatClick(event: Event) {
     event.preventDefault();
     const chatId = prompt('Введите ID чата для удаления');
-  
     if (chatId) {
       const numericChatId = parseInt(chatId, 10);
       if (!isNaN(numericChatId)) {
@@ -138,10 +196,17 @@ export default class ChatPage extends Block {
           .then(() => {
             alert(`Чат с ID ${numericChatId} успешно удален!`);
             this.state.currentChatId = null;
+            this.setProps({ currentChatName: '' });
             this.initChats();
+
+            if (this.webSocket) {
+              this.webSocket.close();
+              this.webSocket = null;
+            }
           })
           .catch(error => {
-            console.error('Ошибка при удалении чата:', error);
+      
+            alert('Не удалось удалить чат');
           });
       } else {
         alert('Неверный формат ID чата.');
@@ -153,61 +218,86 @@ export default class ChatPage extends Block {
 
   handleAddUserClick(event: Event) {
     event.preventDefault();
-
     const chatIdInput = prompt('Введите номер чата для добавления пользователя');
     const chatId = parseInt(chatIdInput || '', 10);
-
-    if (!chatId || isNaN(chatId)) {
+    if (isNaN(chatId) || chatId <= 0) {
       alert('Некорректный номер чата');
       return;
     }
-
     const userIdInput = prompt('Введите ID пользователя для добавления');
     const userId = parseInt(userIdInput || '', 10);
-
-    if (!userId || isNaN(userId)) {
+    if (isNaN(userId) || userId <= 0) {
       alert('Некорректный ID пользователя');
       return;
     }
-
-    ChatsAPI.addUserToChat({ users: [userId], chatId })
-      .then(response => {
-        alert(`Пользователь с ID ${userId} успешно добавлен в чат с ID ${chatId}`);
-        console.log('Ответ сервера:', response);
-      })
-      .catch(error => {
-        console.error('Ошибка при добавлении пользователя:', error);
-      });
+    ChatsAPI.addUserToChat({ 
+      chatId,
+      users: [userId], 
+    })
+    .then(response => {
+      alert(`Пользователь с ID ${userId} успешно добавлен в чат с ID ${chatId}`);
+ 
+    })
+    .catch(error => {
+  
+      alert(`Не удалось добавить пользователя: ${error.message}`);
+    });
   }
-
+  
   handleRemoveUserClick(event: Event) {
     event.preventDefault();
-
     const chatIdInput = prompt('Введите номер чата для удаления пользователя');
     const chatId = parseInt(chatIdInput || '', 10);
-
-    if (!chatId || isNaN(chatId)) {
+    if (isNaN(chatId) || chatId <= 0) {
       alert('Некорректный номер чата');
       return;
     }
-
     const userIdInput = prompt('Введите ID пользователя для удаления');
     const userId = parseInt(userIdInput || '', 10);
-
-    if (!userId || isNaN(userId)) {
+    if (isNaN(userId) || userId <= 0) {
       alert('Некорректный ID пользователя');
       return;
     }
-
     ChatsAPI.removeUserFromChat({ users: [userId], chatId })
       .then(() => {
         alert(`Пользователь с ID ${userId} успешно удалён из чата с ID ${chatId}`);
       })
       .catch(error => {
-        console.error('Ошибка при удалении пользователя:', error);
+
+        alert('Не удалось удалить пользователя');
       });
   }
 
+  handleSendMessageClick(event: Event) {
+    event.preventDefault();
+    const messageInput = document.getElementById('message') as HTMLInputElement;
+    const message = messageInput?.value.trim();
+    if (!message) {
+      alert('Сообщение не может быть пустым');
+      return;
+    }
+    if (this.webSocket) {
+      this.webSocket.sendMessage(message);
+      this.addMessageToUI({
+        userId: this.props.userId,
+        content: message,
+      });
+      messageInput.value = '';
+    } else {
+      alert('Не подключено к чату');
+    }
+  }
+
+  addMessageToUI(data: any) {
+    const messagesContainer = document.getElementById('messages');
+    if (messagesContainer) {
+      const messageElement = document.createElement('div');
+      messageElement.className = 'message';
+      messageElement.textContent = `${data.userId}: ${data.content}`;
+      messagesContainer.appendChild(messageElement);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight; 
+    }
+  }
 
   render(): string {
     return `
@@ -219,6 +309,7 @@ export default class ChatPage extends Block {
             {{{deleteChatButton}}}
             {{{addUserButton}}}
             {{{removeUserButton}}}
+            {{{selectChatButton}}} <!-- Новая кнопка для выбора чата -->
             <input type="text" placeholder="Поиск" class="chat-page__search-input"/>
           </div>
           <div class="chat-page__chats">
@@ -230,6 +321,7 @@ export default class ChatPage extends Block {
             <h2>{{currentChatName}}</h2>
           </div>
           <div class="chat-page__messages" id="messages">
+            <!-- Здесь будут отображаться сообщения -->
           </div>
           <div class="chat-page__footer">
             <input type="text" id="message" placeholder="Введите сообщение..." />
@@ -240,3 +332,4 @@ export default class ChatPage extends Block {
     `;
   }
 }
+

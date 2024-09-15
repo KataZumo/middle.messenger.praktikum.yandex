@@ -49,6 +49,7 @@ class Router {
 
     start(): void {
         window.onpopstate = (event) => {
+            // @ts-expect-error
             this._onRoute(event.currentTarget.location.pathname);
         };
 

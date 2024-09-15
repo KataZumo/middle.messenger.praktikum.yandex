@@ -146,12 +146,8 @@ export default class ProfileInfoChangeComponent extends Block {
 
     try {
       const updatedUser: UserProfile = await UserAPI.updateProfile(data as any);
-      console.log('Профиль успешно обновлен:', updatedUser);
-
-      // Обновляем sessionStorage новыми данными пользователя
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
-      // Обновляем состояние компонента с новыми данными
       this.setProps({
         email: updatedUser.email,
         loginName: updatedUser.login,
@@ -160,8 +156,6 @@ export default class ProfileInfoChangeComponent extends Block {
         chatName: updatedUser.display_name,
         phone: updatedUser.phone,
       });
-
-      // Редирект на страницу профиля
       this.router.go('/profile');
     } catch (error) {
       console.error('Ошибка при обновлении профиля:', error);

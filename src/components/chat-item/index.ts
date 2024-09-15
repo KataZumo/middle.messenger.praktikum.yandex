@@ -46,6 +46,3 @@ export default class ChatItem extends Block {
     `;
   }
 }
-
-
-    // <button class="chat-item__delete-button" data-chat-id="${this.props.id}">Удалить</button>

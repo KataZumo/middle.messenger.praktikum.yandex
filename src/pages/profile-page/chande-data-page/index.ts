@@ -43,12 +43,11 @@ export default class ChangeDataPage extends Block {
       }),
     });
 
-    this.profileInfo = profileInfo; // Сохраняем ссылку на компонент профиля
+    this.profileInfo = profileInfo; 
   }
 
   handleSaveClick(event: Event) {
     event.preventDefault();
-    // Вызов метода handleSaveClick из ProfileInfoChangeComponent
     this.profileInfo.handleSaveClick(event);
   }
 

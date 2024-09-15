@@ -26,6 +26,6 @@ export type SignUpRequest ={
     login: string;
     display_name: string;
     phone: string;
-    avatar?: string; // необязательное поле
+    avatar?: string; 
     // photoUrl?: string;
   }
