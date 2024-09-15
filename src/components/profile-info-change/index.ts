@@ -92,7 +92,7 @@ export default class ProfileInfoChangeComponent extends Block {
 
     this.modal = modal;
     this.authAPI = new AuthAPI();
-      // @ts-ignore
+      // @ts-expect-error null
     this.router = new Router();
 
     this.loadUserProfile();
@@ -145,7 +145,7 @@ export default class ProfileInfoChangeComponent extends Block {
     };
 
     try {
-      //@ts-ignore
+      // @ts-expect-error null
       const updatedUser: UserProfile = await UserAPI.updateProfile(data as any);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 

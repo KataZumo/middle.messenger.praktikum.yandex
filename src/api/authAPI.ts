@@ -18,7 +18,7 @@ import { SigninData, SignUpRequest } from './type';
     }
   
     async logout(): Promise<any>  {
-      // @ts-ignore
+      // @ts-expect-error null
       return await this.http.post('/logout')
     }
   }

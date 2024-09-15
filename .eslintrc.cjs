@@ -31,7 +31,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/unified-signatures": "warn",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/ban-ts-comment": "error",
     eqeqeq: ["warn", "smart"],
   },
   ignorePatterns: ["dist", ".eslintrc.js"],
