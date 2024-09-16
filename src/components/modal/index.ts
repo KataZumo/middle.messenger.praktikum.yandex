@@ -49,6 +49,7 @@ export default class ModalComponent extends Block {
       const formData = new FormData();
       formData.append('avatar', file);
       try {
+      //@ts-expect-error null
         const updatedUser = await UserAPI.changeAvatar(formData);
         const user = JSON.parse(sessionStorage.getItem('user') || '{}');
         user.avatar = updatedUser.avatar; 

@@ -93,6 +93,7 @@ export default class ChangePasswordPage extends Block {
     };
 
     try {
+        //@ts-expect-error null
       await UserAPI.changePassword(data as any);
       console.log("Пароль успешно изменен");
 
