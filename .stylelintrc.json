@@ -52,8 +52,7 @@
     "declaration-empty-line-before": null,
     "unit-no-unknown": null,
     "property-no-unknown": null,
-    "selector-pseudo-class-no-unknown": null,
-    "source.fixAll.eslint": true
+    "selector-pseudo-class-no-unknown": null
   }
 }
 
