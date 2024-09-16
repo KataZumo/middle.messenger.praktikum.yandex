@@ -14,6 +14,7 @@ interface ChangePasswordPageProps {
 
 export default class ChangePasswordPage extends Block {
   private router: Router;
+  userAPI: UserAPI
 
   constructor(props: ChangePasswordPageProps) {
     const profilePhoto = new ProfilePhotoComponent({
@@ -60,6 +61,7 @@ export default class ChangePasswordPage extends Block {
         },
       }),
     });
+    this.userAPI = new UserAPI();
     //@ts-expect-error null
     this.router = new Router();
   }
@@ -93,7 +95,6 @@ export default class ChangePasswordPage extends Block {
     };
 
     try {
-        //@ts-expect-error null
       await UserAPI.changePassword(data as any);
       console.log("Пароль успешно изменен");
 
