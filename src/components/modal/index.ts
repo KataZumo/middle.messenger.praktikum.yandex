@@ -52,6 +52,7 @@ export default class ModalComponent extends Block {
       try {
         const updatedUser = await UserAPI.changeAvatar(formData);
         const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+        //@ts-expect-error null
         user.avatar = updatedUser.avatar; 
         sessionStorage.setItem('user', JSON.stringify(user));
         this.showStatusMessage('Аватарка успешно обновлена!');
