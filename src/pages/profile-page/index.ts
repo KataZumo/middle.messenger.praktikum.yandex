@@ -1,4 +1,3 @@
-import { Link } from "../../components";
 import LinkComponent from "../../components/link";
 import ProfileInfoComponent from "../../components/profile-info";
 import Block from "../../tools/Block";
@@ -37,6 +36,7 @@ export default class ProfilePage extends Block {
       }),
       Link: new LinkComponent({ href: '/chat', text: 'Назад', className: 'profile-page__nav-btn' }),
     });
+    //@ts-expect-error null
     this.router = new Router();
   }
 
