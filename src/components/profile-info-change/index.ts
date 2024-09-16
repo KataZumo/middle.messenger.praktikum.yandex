@@ -2,7 +2,7 @@ import Block from "../../tools/Block";
 import ModalComponent from "../modal";
 import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import InputComponent from "../input";
-import UserAPI from "../../api/userApi";
+import userApi from "../../api/userApi";
 import AuthAPI from "../../api/authAPI";
 import Router from "../../tools/Router";
 
@@ -146,7 +146,7 @@ export default class ProfileInfoChangeComponent extends Block {
 
     try {
       //@ts-expect-error null
-      const updatedUser: UserProfile = await UserAPI.updateProfile(data as any);
+      const updatedUser: UserProfile = await userApi.updateProfile(data);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
       this.setProps({
