@@ -56,6 +56,7 @@ export default class ModalComponent extends Block {
         this.showStatusMessage('Аватарка успешно обновлена!');
   
         if (this.props.onApply) {
+          //@ts-expect-error null
           this.props.onApply(); 
         }
         this.hide();
@@ -73,6 +74,7 @@ export default class ModalComponent extends Block {
     sessionStorage.setItem('user', JSON.stringify(user));
     this.showStatusMessage('Аватарка успешно обновлена!');
     if (this.props.onApply) {
+          //@ts-expect-error null
       this.props.onApply(); 
     }
     this.hide();

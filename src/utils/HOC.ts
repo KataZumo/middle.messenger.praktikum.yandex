@@ -10,7 +10,7 @@ export function connect(Component: typeof Block, mapStateToProps: (state: any) =
         constructor(props: any) {
             let state = mapStateToProps(store.getState());
             super({ ...props, ...state });
-
+            //@ts-expect-error null
             this.unsubscribe = store.subscribe(() => {
                 const newState = mapStateToProps(store.getState());
 
@@ -20,7 +20,6 @@ export function connect(Component: typeof Block, mapStateToProps: (state: any) =
                 state = newState;
             });
         }
-
         componentWillUnmount() {
             if (this.unsubscribe) {
                 this.unsubscribe();
