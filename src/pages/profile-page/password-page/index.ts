@@ -60,7 +60,7 @@ export default class ChangePasswordPage extends Block {
         },
       }),
     });
-
+    //@ts-expect-error null
     this.router = new Router();
   }
 

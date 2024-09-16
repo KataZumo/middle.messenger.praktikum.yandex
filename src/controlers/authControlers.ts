@@ -1,7 +1,6 @@
 import AuthAPI from "../api/authAPI";
 import { SigninData, SignUpRequest, UserData } from "../api/type";
 import Router from "../tools/Router";
-import {store} from "../tools/Store"
 
 class AuthController {
     private api: AuthAPI;
@@ -46,7 +45,6 @@ class AuthController {
       async getUser(): Promise<any | null> {
         try {
           const user = await this.api.getUser();
-    
           if (user) {
             this.saveUserData(user); 
             return user;

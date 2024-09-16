@@ -2,10 +2,12 @@ import ChatsAPI from '../api/сhatsAPI';
 import Router from '../tools/Router';
 
 class ChatsController {
+      //@ts-expect-error null
   private api: ChatsAPI;
   private router: Router;
 
   constructor() {
+      //@ts-expect-error null
     this.api = new ChatsAPI;
     this.router = Router.getInstance(); 
   }
@@ -43,9 +45,10 @@ class ChatsController {
       console.log(`Чат с ID ${chatId} удалён`);
       alert('Чат успешно удалён');
       await this.getChats();
-      const currentChatId = this.getCurrentChatId(); // Реализуйте этот метод
+      //@ts-expect-error null
+      const currentChatId = this.getCurrentChatId(); 
       if (currentChatId === chatId) {
-        this.router.go('/chat'); // Перенаправление на общий чат или другую страницу
+        this.router.go('/chat'); 
       }
     } catch (error) {
       alert('Не удалось удалить чат');

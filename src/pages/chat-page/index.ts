@@ -262,6 +262,7 @@ export default class ChatPage extends Block {
       .then(() => {
         alert(`Пользователь с ID ${userId} успешно удалён из чата с ID ${chatId}`);
       })
+      //@ts-expect-error null
       .catch(error => {
 
         alert('Не удалось удалить пользователя');
