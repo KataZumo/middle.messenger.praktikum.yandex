@@ -4,7 +4,6 @@ import Link from "../../components/link";
 import "./chat-page.scss";
 import ChatsAPI from "../../api/сhatsAPI"
 import { Button } from "../../components";
-import сhatsAPI from "../../api/сhatsAPI";
 import ChatWebSocket from "../../tools/ChatWebSocket";
 import { getUserData } from "../../utils/HOC";
 interface ChatPageProps {
