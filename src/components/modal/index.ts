@@ -1,6 +1,6 @@
 import Block from "../../tools/Block";
 import "./modal.scss";
-import UserAPI from "../../api/userApi"
+import userApi from "../../api/userApi"
 
 interface ModalComponentProps {
   events?: {
@@ -50,9 +50,8 @@ export default class ModalComponent extends Block {
       const formData = new FormData();
       formData.append('avatar', file);
       try {
-        const updatedUser = await UserAPI.changeAvatar(formData);
+        const updatedUser = await userApi.changeAvatar(formData);
         const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-        //@ts-expect-error null
         user.avatar = updatedUser.avatar; 
         sessionStorage.setItem('user', JSON.stringify(user));
         this.showStatusMessage('Аватарка успешно обновлена!');

@@ -18,6 +18,10 @@ export interface User {
 
 class UserAPI extends BaseAPIData {
   //@ts-expect-error null
+  static changePassword(arg0: any) {
+    throw new Error("Method not implemented.");
+  }
+  //@ts-expect-error null
   static changeAvatar(formData: FormData) {
     throw new Error("Method not implemented.");
   }
