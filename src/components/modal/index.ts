@@ -1,6 +1,6 @@
 import Block from "../../tools/Block";
 import "./modal.scss";
-import userApi from "../../api/userApi"
+import UserAPI from "../../api/userApi"
 
 interface ModalComponentProps {
   events?: {
@@ -50,7 +50,7 @@ export default class ModalComponent extends Block {
       const formData = new FormData();
       formData.append('avatar', file);
       try {
-        const updatedUser = await userApi.changeAvatar(formData);
+        const updatedUser = await UserAPI.changeAvatar(formData);
         const user = JSON.parse(sessionStorage.getItem('user') || '{}');
         user.avatar = updatedUser.avatar; 
         sessionStorage.setItem('user', JSON.stringify(user));

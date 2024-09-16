@@ -31,7 +31,7 @@ export default class ProfileInfoChangeComponent extends Block {
   modal: ModalComponent;
   authAPI: AuthAPI;
   router: Router;
-  userAPI: UserAPI;
+  // userAPI: UserAPI;
 
   constructor(props: ProfileChangePageProps) {
     const modal = new ModalComponent({
@@ -92,7 +92,7 @@ export default class ProfileInfoChangeComponent extends Block {
     });
 
     this.modal = modal;
-    this.userAPI = new UserAPI();
+    // this.userAPI = new UserAPI();
     this.authAPI = new AuthAPI();
       // @ts-expect-error null
     this.router = new Router();
@@ -147,7 +147,7 @@ export default class ProfileInfoChangeComponent extends Block {
     };
 
     try {
-      const updatedUser: any = await this.userAPI.updateProfile(data as any);
+      const updatedUser: any = await UserAPI.updateProfile(data as any);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
       this.setProps({
