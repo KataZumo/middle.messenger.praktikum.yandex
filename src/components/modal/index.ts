@@ -39,7 +39,7 @@ export default class ModalComponent extends Block {
   }
 
   async handleApplyClick() {
-    const fileInputElement = this.element.querySelector('#file-input') as HTMLInputElement;
+    const fileInputElement = this.element?.querySelector('#file-input') as HTMLInputElement;
     if (!fileInputElement) {
       return;
     }
@@ -53,10 +53,10 @@ export default class ModalComponent extends Block {
         const user = JSON.parse(sessionStorage.getItem('user') || '{}');
         user.avatar = updatedUser.avatar; 
         sessionStorage.setItem('user', JSON.stringify(user));
-        const newAvatarUrl = `https://ya-praktikum.tech/api/v2/resources${updatedUser.avatar}`; 
         this.showStatusMessage('Аватарка успешно обновлена!');
   
         if (this.props.onApply) {
+          //@ts-expect-error null
           this.props.onApply(); 
         }
         this.hide();
@@ -67,24 +67,20 @@ export default class ModalComponent extends Block {
       this.showStatusMessage('Пожалуйста, выберите файл');
     }
   }
-  
 
   updateUserProfile(updatedUser: any) {
     const user = JSON.parse(sessionStorage.getItem('user') || '{}');
     user.avatar = updatedUser.avatar; 
     sessionStorage.setItem('user', JSON.stringify(user));
-
-    const newAvatarUrl = `https://ya-praktikum.tech/api/v2/resources${updatedUser.avatar}`;
     this.showStatusMessage('Аватарка успешно обновлена!');
-
     if (this.props.onApply) {
+      //@ts-expect-error null
       this.props.onApply(); 
     }
-
     this.hide();
   }
   showStatusMessage(message: string) {
-    const statusMessageElement = this.element.querySelector('#status-message') as HTMLElement;
+    const statusMessageElement = this.element?.querySelector('#status-message') as HTMLElement;
     statusMessageElement.textContent = message;
   }
 
@@ -98,11 +94,10 @@ export default class ModalComponent extends Block {
   }
 
   override render() {
-
     setTimeout(() => {
-      const fileInput = this.element.querySelector('#file-input') as HTMLInputElement;
+      const fileInput = this.element?.querySelector('#file-input') as HTMLInputElement;
       if (fileInput) {
-        fileInput.addEventListener('change', this.handleFileSelection.bind(this)); // Привязываем контекст
+        fileInput.addEventListener('change', this.handleFileSelection.bind(this)); 
       }
     }, 0);
 
@@ -120,10 +115,12 @@ export default class ModalComponent extends Block {
   }
 
   show() {
+    //@ts-expect-error null
     this.element.style.display = 'block';
   }
 
   hide() {
+    //@ts-expect-error null
     this.element.style.display = 'none';
   }
 }

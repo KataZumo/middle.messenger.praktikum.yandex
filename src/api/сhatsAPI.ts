@@ -1,27 +1,4 @@
 import { BaseAPIData } from "./api";
-import { UserData } from "./type";
-
-// Определение типов данных для методов
-interface Chat {
-    id: number;
-    title: string;
-    avatar?: string;
-    unreadMessages: any;
-    lastMessage: any
-  }
-  
-  interface CreateChatData {
-    title: string;
-  }
-  
-  interface AddRemoveUsersData {
-    users: number[];
-    chatId: number;
-  }
-  
-  interface NewMessagesCount {
-    count: number;
-  }
   
 class ChatsAPI extends BaseAPIData {
     constructor() {

@@ -25,6 +25,7 @@ export default class ChatItem extends Block {
   handleClick() {
     console.log(`🚀 Клик по чату с ID: ${this.props.id}`);
     if (this.props.events?.click) {
+      //@ts-expect-error null
       this.props.events.click();
     }
   }

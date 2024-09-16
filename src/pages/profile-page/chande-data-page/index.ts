@@ -2,7 +2,6 @@ import "./chande-data-page.scss";
 import Block from "../../../tools/Block";
 import { Button } from "../../../components";
 import ProfileInfoChangeComponent from "../../../components/profile-info-change";
-import userApi from "../../../api/userApi";
 
 interface ChangeDataPageProps {
   name: string;

@@ -145,7 +145,7 @@ export default class ProfileInfoChangeComponent extends Block {
     };
 
     try {
-      // @ts-expect-error null
+      //@ts-expect-error null
       const updatedUser: UserProfile = await UserAPI.updateProfile(data as any);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
