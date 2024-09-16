@@ -33,4 +33,4 @@ class UserAPI extends BaseAPIData {
   }
 }
 
-export default new UserAPI
+export default UserAPI
