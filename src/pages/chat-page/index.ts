@@ -176,8 +176,8 @@ export default class ChatPage extends Block {
             alert('Чат создан, но его ID не получен.');
           }
         })
+          //@ts-expect-error null
         .catch(error => {
-    
           alert('Не удалось создать чат');
         });
     } else {
@@ -203,8 +203,8 @@ export default class ChatPage extends Block {
               this.webSocket = null;
             }
           })
+          //@ts-expect-error null
           .catch(error => {
-      
             alert('Не удалось удалить чат');
           });
       } else {
@@ -233,6 +233,7 @@ export default class ChatPage extends Block {
       chatId,
       users: [userId], 
     })
+      //@ts-expect-error null
     .then(response => {
       alert(`Пользователь с ID ${userId} успешно добавлен в чат с ID ${chatId}`);
  
