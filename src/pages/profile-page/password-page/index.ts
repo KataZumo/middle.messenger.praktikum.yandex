@@ -4,7 +4,7 @@ import { Button } from "../../../components";
 import ProfilePhotoComponent from "../../../components/photo/ProfilePhotoComponent";
 import InputComponent from "../../../components/input";
 import Router from "../../../tools/Router";
-import userApi from "../../../api/userApi";
+import UserAPI from "../../../api/userApi";
 
 interface ChangePasswordPageProps {
   oldPassword: string;
@@ -93,7 +93,7 @@ export default class ChangePasswordPage extends Block {
     };
 
     try {
-      await userApi.changePassword(data as any);
+      await UserAPI.changePassword(data as any);
       console.log("Пароль успешно изменен");
 
       this.router.go('/profile');
