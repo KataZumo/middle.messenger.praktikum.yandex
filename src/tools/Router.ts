@@ -49,6 +49,7 @@ class Router {
 
     start(): void {
         window.onpopstate = (event) => {
+    //@ts-expect-error null
             this._onRoute(event.currentTarget?.location.pathname);
         };
 
@@ -88,6 +89,7 @@ class Router {
     }
 
     getRoute(pathname: string): IRoute | undefined {
+    //@ts-expect-error null
         return this.routes.find(route => route.match(pathname));
     }
 
