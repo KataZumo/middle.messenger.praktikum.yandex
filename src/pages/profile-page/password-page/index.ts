@@ -18,9 +18,7 @@ export default class ChangePasswordPage extends Block {
 
   constructor(props: ChangePasswordPageProps) {
     const profilePhoto = new ProfilePhotoComponent({
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s",
-      onClick: () => "", 
+      onClick() {},
     });
 
     super({

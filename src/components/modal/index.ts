@@ -1,33 +1,35 @@
+import UserAPI from "../../api/userApi";
 import Block from "../../tools/Block";
 import "./modal.scss";
-import UserAPI from "../../api/userApi"
+// import UserAPI from "../../api/userApi"
 
 interface ModalComponentProps {
   events?: {
     click?: (event: Event) => void;
   };
-  onApply?: () => void; 
+  onApply?: () => void;
   [key: string]: unknown;
 }
 
 export default class ModalComponent extends Block {
   private statusMessage: HTMLElement;
-  private previewImage: HTMLImageElement; 
+  private previewImage: HTMLImageElement;
+  userAPI: UserAPI | undefined;
+
   constructor(props: ModalComponentProps) {
     super({
       ...props,
       events: {
         click: (event: Event) => this.handleClick(event),
       },
-      
     });
 
     this.statusMessage = document.createElement('p');
     this.statusMessage.className = 'modal__status-message';
-
-    this.previewImage = document.createElement('img'); 
+    this.previewImage = document.createElement('img');
     this.previewImage.className = 'modal__preview-image';
     this.previewImage.style.display = 'none';
+    this.userAPI = new UserAPI();
   }
 
   handleClick(event: Event) {
@@ -35,99 +37,100 @@ export default class ModalComponent extends Block {
 
     if (target.classList.contains('modal__close-button')) {
       this.hide();
-      this.handleApplyClick(); 
     }
   }
 
   async handleApplyClick() {
     const fileInputElement = this.element?.querySelector('#file-input') as HTMLInputElement;
-    if (!fileInputElement) {
+    if (!fileInputElement || !fileInputElement.files || !fileInputElement.files[0]) {
+      this.showStatusMessage('Пожалуйста, выберите файл');
+      console.log("ModalComponent: файл не выбран или input не найден");
       return;
     }
-  
-    if (fileInputElement.files && fileInputElement.files[0]) {
-      const file = fileInputElement.files[0];
-      const formData = new FormData();
-      formData.append('avatar', file);
-      try {
-        const updatedUser = await UserAPI.changeAvatar(formData);
-        const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-        user.avatar = updatedUser.avatar; 
-        sessionStorage.setItem('user', JSON.stringify(user));
-        this.showStatusMessage('Аватарка успешно обновлена!');
-  
-        if (this.props.onApply) {
-          //@ts-expect-error null
-          this.props.onApply(); 
-        }
-        this.hide();
-      } catch (error: any) {
-        this.showStatusMessage('Ошибка при загрузке аватарки.');
-      }
-    } else {
-      this.showStatusMessage('Пожалуйста, выберите файл');
-    }
-  }
 
-  updateUserProfile(updatedUser: any) {
-    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-    user.avatar = updatedUser.avatar; 
-    sessionStorage.setItem('user', JSON.stringify(user));
-    this.showStatusMessage('Аватарка успешно обновлена!');
-    if (this.props.onApply) {
-          //@ts-expect-error null
-      this.props.onApply(); 
+    const file = fileInputElement.files[0];
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    console.log("ModalComponent: выбранный файл:", file);
+
+    try {
+      console.log("ModalComponent: отправка запроса на изменение аватарки...");
+      const updatedUser = await this.userAPI?.changeAvatar(formData);
+
+      console.log("ModalComponent: ответ от API:", updatedUser);
+
+      if (updatedUser) {
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
+        console.log("ModalComponent: обновленный пользователь сохранен в sessionStorage:", updatedUser);
+        this.showStatusMessage('Аватарка успешно обновлена!');
+        
+        if (this.props.onApply) {
+          // @ts-expect-error null
+          this.props.onApply();  
+        }
+
+        this.hide();
+      }
+    } catch (error) {
+      console.error("ModalComponent: ошибка при загрузке аватарки:", error);
+      this.showStatusMessage('Ошибка при загрузке аватарки.');
     }
-    this.hide();
-  }
-  showStatusMessage(message: string) {
-    const statusMessageElement = this.element?.querySelector('#status-message') as HTMLElement;
-    statusMessageElement.textContent = message;
   }
 
   handleFileSelection(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); 
+      const imageUrl = URL.createObjectURL(file);
       this.previewImage.src = imageUrl;
-      this.previewImage.style.display = 'block'; 
+      this.previewImage.style.display = 'block';
+    }
+  }
+
+  showStatusMessage(message: string) {
+    const statusMessageElement = this.element?.querySelector('#status-message') as HTMLElement;
+    if (statusMessageElement) {
+      statusMessageElement.textContent = message;
     }
   }
 
   override render() {
-    setTimeout(() => {
-      const fileInput = this.element?.querySelector('#file-input') as HTMLInputElement;
-      if (fileInput) {
-        fileInput.addEventListener('change', this.handleFileSelection.bind(this)); 
-      }
-    }, 0);
-
     return `<div class="modal" style="display: none;">
       <div class="modal__content">
         <span class="modal__close-button">&times;</span>
         <h2 class="modal__title">Загрузить файл</h2>
         <label class="modal__label" for="file-input" id="file-label">Выбрать файл на компьютере</label>
         <input type="file" id="file-input" class="modal__input">
-        <img class="modal__preview-image" src="" style="display: none;" /> <!-- Превью изображения -->
+        <img class="modal__preview-image" src="" style="display: none;" />
         <button class="modal__apply-button">Применить</button>
         <p class="modal__status-message" id="status-message"></p>
       </div>
     </div>`;
   }
 
+  override componentDidMount() {
+    const fileInput = this.element?.querySelector('#file-input') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.addEventListener('change', this.handleFileSelection.bind(this));
+    }
+
+    const applyButton = this.element?.querySelector('.modal__apply-button') as HTMLButtonElement;
+    if (applyButton) {
+      applyButton.addEventListener('click', this.handleApplyClick.bind(this));
+    }
+  }
+
   show() {
-    //@ts-expect-error null
-    this.element.style.display = 'block';
+    if (this.element) {
+      this.element.style.display = 'block';
+    }
   }
 
   hide() {
-    //@ts-expect-error null
-    this.element.style.display = 'none';
+    if (this.element) {
+      this.element.style.display = 'none';
+    }
   }
 }
-
-
-
-
 
 

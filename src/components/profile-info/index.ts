@@ -26,7 +26,8 @@ export default class ProfileInfoComponent extends Block {
       onApply: () => console.log("Файл добавлен"),
     });
     const profilePhoto = new ProfilePhotoComponent({
-      avatar: props.photoUrl || `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s` ,
+      // avatar: props.photoUrl || `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s`,
+      avatar: props.photoUrl,
       onClick: () => modal.show(),
     });
     
@@ -86,7 +87,6 @@ export default class ProfileInfoComponent extends Block {
     this.authAPI = new AuthAPI();
   }
 
-
   handleLogout() {
     this.authAPI.logout().then(() => {
       window.location.href = "/login";
@@ -94,7 +94,6 @@ export default class ProfileInfoComponent extends Block {
       console.error('Logout failed', err);
     });
   }
-
 
   override render() {
     return `<div class="profile-page">

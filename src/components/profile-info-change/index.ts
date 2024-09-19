@@ -31,7 +31,8 @@ export default class ProfileInfoChangeComponent extends Block {
   modal: ModalComponent;
   authAPI: AuthAPI;
   router: Router;
-  // userAPI: UserAPI;
+  profilePhoto: ProfilePhotoComponent;
+  userAPI: UserAPI;
 
   constructor(props: ProfileChangePageProps) {
     const modal = new ModalComponent({
@@ -39,7 +40,7 @@ export default class ProfileInfoChangeComponent extends Block {
     });
 
     const profilePhoto = new ProfilePhotoComponent({
-      avatar: props.photoUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s",
+      avatar: props.photoUrl,
       onClick: () => modal.show(),
     });
 
@@ -90,21 +91,19 @@ export default class ProfileInfoChangeComponent extends Block {
         onChange: (value) => this.onInputChange('phone', value),
       }),
     });
-
     this.modal = modal;
-    // this.userAPI = new UserAPI();
     this.authAPI = new AuthAPI();
+    this.userAPI = new UserAPI();
       // @ts-expect-error null
     this.router = new Router();
-
+    this.profilePhoto = profilePhoto;
     this.loadUserProfile();
   }
 
   onInputChange(field: string, value: string) {
     if (this.validateInput(field, value)) {
       this.setProps({ [field]: value });
-    }
-  }
+    }}
 
   validateInput(field: string, value: string): boolean {
     switch (field) {
@@ -114,12 +113,18 @@ export default class ProfileInfoChangeComponent extends Block {
         return /^\d{1}-\d{1}-\d{1}-\d{1}-\d{1}-\d{1}$/.test(value);
       default:
         return true;
+    }}
+
+    updatePhoto() {
+      const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      console.log("🚀 ~ ProfileInfoChangeComponent ~ updatePhoto ~ user:", user)
+      this.profilePhoto.setProps({ avatar: user.avatar });
     }
-  }
 
   async loadUserProfile() {
     try {
       const user = await this.authAPI.getUser();
+      // console.log("🚀 ~ ProfileInfoChangeComponent ~ loadUserProfile ~ user:", user.photoUrl)
       this.setProps({
         email: user.email,
         loginName: user.login,
@@ -127,7 +132,7 @@ export default class ProfileInfoChangeComponent extends Block {
         secondName: user.second_name,
         chatName: user.display_name || '',
         phone: user.phone,
-        photoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s"
+        photoUrl: user.avatar || user.photoUrl
       });
     } catch (error) {
       console.error('Ошибка при загрузке профиля:', error);
@@ -147,7 +152,7 @@ export default class ProfileInfoChangeComponent extends Block {
     };
 
     try {
-      const updatedUser: any = await UserAPI.updateProfile(data as any);
+      const updatedUser: any = await this.userAPI.updateProfile(data as any);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
       this.setProps({
