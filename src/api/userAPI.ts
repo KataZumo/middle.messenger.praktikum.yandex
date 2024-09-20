@@ -16,7 +16,7 @@ export interface User {
   email: string
 }
 
-class UserAPI extends BaseAPIData {
+export class UserAPI extends BaseAPIData {
   constructor() {
     super('user')
   }
@@ -33,4 +33,4 @@ class UserAPI extends BaseAPIData {
   }
 }
 
-export default UserAPI
+// export default UserAPI

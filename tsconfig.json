@@ -13,7 +13,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@api/*": ["api/*"]
+    }
   },
   "include": ["src/**/*", "custom.d.ts", "server.js"],
   "exclude": ["node_modules", "dist"]

@@ -1,6 +1,6 @@
 import Block from "../../tools/Block";
 import "./modal.scss";
-import UserAPI from "../../api/userApi";
+import {UserAPI} from "../../api/userApi";
 
 interface ModalComponentProps {
   events?: {
@@ -123,7 +123,6 @@ export default class ModalComponent extends Block {
       applyButton.removeEventListener('click', this.handleApplyClick.bind(this));
     }
   }
-
 
 render() {
     return `
