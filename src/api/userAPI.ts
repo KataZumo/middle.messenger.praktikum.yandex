@@ -17,19 +17,20 @@ export interface User {
 }
 
 export class UserAPI extends BaseAPIData {
+
   constructor() {
     super('user')
   }
 
-  updateProfile(data: User) {
-    return this.http.put('/profile', data )
+  async updateProfile(data: User) {
+    return await this.http.put('/profile', data )
   }
 
-    changePassword(data: ChangePasswordData) {
-    return this.http.put('/password', data )
+   async changePassword(data: ChangePasswordData) {
+    return await this.http.put('/password', data )
   }
-  changeAvatar(formData: FormData): Promise<any> {
-    return this.http.put('/profile/avatar', formData);
+ async changeAvatar(formData: FormData): Promise<any> {
+    return await this.http.put('/profile/avatar', formData);
   }
 }
 

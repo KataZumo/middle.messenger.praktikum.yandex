@@ -1,6 +1,7 @@
+import { UserAPI } from "../../api/userApi";
 import Block from "../../tools/Block";
 import "./modal.scss";
-import {UserAPI} from "../../api/userApi";
+
 
 interface ModalComponentProps {
   events?: {

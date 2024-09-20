@@ -1,6 +1,7 @@
 import { BaseAPIData } from "./api";
   
 class ChatsAPI extends BaseAPIData {
+  
     constructor() {
       super('chats');
     }
