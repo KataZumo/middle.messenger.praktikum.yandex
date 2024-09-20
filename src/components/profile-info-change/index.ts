@@ -4,7 +4,7 @@ import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import InputComponent from "../input";
 import Router from "../../tools/Router";
 import AuthAPI from "../../api/authAPI";
-import { UserAPI } from "../../api/userApi";
+import UserAPI  from "../../api/userApi";
 
 interface UserProfile {
   email: string;
@@ -32,7 +32,7 @@ export default class ProfileInfoChangeComponent extends Block {
   authAPI: AuthAPI;
   router: Router;
   profilePhoto: ProfilePhotoComponent;
-  userAPI: UserAPI;
+  // userAPI: UserAPI;
 
   constructor(props: ProfileChangePageProps) {
     const modal = new ModalComponent({
@@ -93,7 +93,7 @@ export default class ProfileInfoChangeComponent extends Block {
     });
     this.modal = modal;
     this.authAPI = new AuthAPI();
-    this.userAPI = new UserAPI();
+    // this.userAPI = new UserAPI();
       // @ts-expect-error null
     this.router = new Router();
     this.profilePhoto = profilePhoto;
@@ -152,7 +152,7 @@ export default class ProfileInfoChangeComponent extends Block {
     };
 
     try {
-      const updatedUser: any = await this.userAPI.updateProfile(data as any);
+      const updatedUser: any = await UserAPI.updateProfile(data as any);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
       this.setProps({

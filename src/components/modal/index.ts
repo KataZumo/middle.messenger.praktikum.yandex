@@ -1,4 +1,4 @@
-import { UserAPI } from "../../api/userApi";
+import  UserAPI  from "../../api/userApi";
 import Block from "../../tools/Block";
 import "./modal.scss";
 
@@ -15,7 +15,7 @@ export default class ModalComponent extends Block {
   private statusMessage: HTMLElement;
   private previewImage: HTMLImageElement;
   private avatarUrl: string | null = null;
-  userAPI: UserAPI;
+  // userAPI: UserAPI;
 
   constructor(props: ModalComponentProps) {
     super({
@@ -30,7 +30,7 @@ export default class ModalComponent extends Block {
     this.previewImage = document.createElement('img');
     this.previewImage.className = 'modal__preview-image';
     this.previewImage.style.display = 'none';
-    this.userAPI = new UserAPI();
+    // this.userAPI = new UserAPI();
   }
 
   handleClick(event: Event) {
@@ -51,7 +51,7 @@ export default class ModalComponent extends Block {
     formData.append('avatar', file);
 
     try {
-      const updatedUser = await this.userAPI.changeAvatar(formData);
+      const updatedUser = await UserAPI.changeAvatar(formData);
       if (updatedUser) {
         sessionStorage.setItem('user', JSON.stringify(updatedUser));
         this.showStatusMessage('Аватарка успешно обновлена!');
