@@ -18,22 +18,16 @@ interface ProfilePageProps {
 }
 
 export default class ProfileInfoComponent extends Block {
-  modal: ModalComponent;
   authAPI: AuthAPI;
   
   constructor(props: ProfilePageProps) {
-    const modal = new ModalComponent({
-      onApply: () => console.log("Файл добавлен"),
-    });
     const profilePhoto = new ProfilePhotoComponent({
-      // avatar: props.photoUrl || `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s`,
       avatar: props.photoUrl,
-      onClick: () => modal.show(),
+      onClick: () => {},
     });
     
     super({
       ...props,
-      modal,
       profilePhoto,
       name: new Title({
         className: "profile-info__value",
@@ -82,8 +76,6 @@ export default class ProfileInfoComponent extends Block {
         },
       }),
     });
-    
-    this.modal = modal;
     this.authAPI = new AuthAPI();
   }
 
@@ -130,7 +122,6 @@ export default class ProfileInfoComponent extends Block {
                     {{{changePassword}}}
                     {{{exitLink}}}
                   </div>
-                {{{modal}}}
               </div>
           </div>`;
   }

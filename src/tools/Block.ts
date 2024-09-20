@@ -39,7 +39,7 @@ export default class Block {
 
   private _addEvents(): void {
     const { events = {} } = this.props;
-    console.log('Adding events:', events); 
+    // console.log('Adding events:', events); 
     Object.keys(events).forEach((eventName) => {
       if (this._element) {
         this._element.addEventListener(eventName, events[eventName]);
@@ -50,7 +50,7 @@ export default class Block {
   
   private _removeEvents() {
     const { events = {} } = this.props;
-    console.log('Removing events:', events); 
+    // console.log('Removing events:', events); 
     Object.entries(events).forEach(([eventName, eventListener]) => {
       if (this._element) {
         this._element.removeEventListener(eventName, eventListener);
@@ -154,7 +154,7 @@ protected componentDidUnmount() {}
   }
 
   private _render(): void {
-    console.log("Render");
+    // console.log("Render");
     const propsAndStubs = { ...this.props };
     const _tmpId = Math.floor(100000 + Math.random() * 900000);
     Object.entries(this.children).forEach(([key, child]) => {

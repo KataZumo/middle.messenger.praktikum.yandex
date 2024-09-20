@@ -29,7 +29,7 @@ class UserAPI extends BaseAPIData {
     return this.http.put('/password', data )
   }
   changeAvatar(formData: FormData): Promise<any> {
-    return this.http.put('/user/profile/avatar', formData);
+    return this.http.put('/profile/avatar', formData);
   }
 }
 
