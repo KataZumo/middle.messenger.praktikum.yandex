@@ -124,7 +124,6 @@ export default class ProfileInfoChangeComponent extends Block {
   async loadUserProfile() {
     try {
       const user = await this.authAPI.getUser();
-      // console.log("🚀 ~ ProfileInfoChangeComponent ~ loadUserProfile ~ user:", user.photoUrl)
       this.setProps({
         email: user.email,
         loginName: user.login,

@@ -30,7 +30,7 @@ export default class ProfilePhotoComponent extends Block {
   }
 
   override render() {
-    return `<div class="profile-photo" onclick="{{events.click}}">
+    return `<div class="profile-photo" onclick="{{this.props.avatar}}">
         <img src="{{avatar}}" alt="Profile Photo" class="profile-photo__image" />
       </div>`;
   }
