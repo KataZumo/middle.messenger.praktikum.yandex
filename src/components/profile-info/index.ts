@@ -2,7 +2,6 @@ import Block from "../../tools/Block";
 import "./profile-info.scss";
 import Title from "../title/title";
 import { Link } from "..";
-import ModalComponent from "../modal";
 import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import AuthAPI from "../../api/authAPI";
 
