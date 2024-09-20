@@ -4,7 +4,7 @@ import { Button } from "../../../components";
 import ProfilePhotoComponent from "../../../components/photo/ProfilePhotoComponent";
 import InputComponent from "../../../components/input";
 import Router from "../../../tools/Router";
-import UserAPI  from "../../../api/userApi";
+import userAPI  from "../../../api/userApi";
 
 interface ChangePasswordPageProps {
   oldPassword: string;
@@ -14,7 +14,6 @@ interface ChangePasswordPageProps {
 
 export default class ChangePasswordPage extends Block {
   private router: Router;
-  // userAPI: UserAPI;
 
   constructor(props: ChangePasswordPageProps) {
     const profilePhoto = new ProfilePhotoComponent({
@@ -59,7 +58,6 @@ export default class ChangePasswordPage extends Block {
         },
       }),
     });
-    // this.userAPI = new UserAPI();
     //@ts-expect-error null
     this.router = new Router();
   }
@@ -93,7 +91,7 @@ export default class ChangePasswordPage extends Block {
     };
 
     try {
-      await UserAPI.changePassword(data as any);
+      await userAPI.changePassword(data as any);
       console.log("Пароль успешно изменен");
 
       this.router.go('/profile');
