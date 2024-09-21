@@ -7,23 +7,23 @@
 Добавлен ESLint и настроен editorconfig
 Добвлена валидация: которую можно посмотреть в консоли разработчика
 Добавлен TS
-Добавлена возможность редактирования пользователей, изменене пароля
+Добавлена возможность редактирования пользователей, изменене пароля, изменение автарки (после перезагрузки страницы)
 Полностью рабочий чат ( Создание чата, удаление чата, добаввление нового пользователя, удаление пользователя и подсключение к одному чату )
 Реал-тайм обмен сообщениями с помощью websoket
 
 
 ## Развертывание
 
-Проект развернут на [Netlify](https://sprint-1--katatest1.netlify.app/).
+Проект развернут на [Netlify](https://wonderful-marigold-5bf588.netlify.app).
 
 ## Страницы
 
-- [Главная страница](https://sprint-2--katatest1.netlify.app/)
-- [Главная регистрации](https://sprint-2--katatest1.netlify.app/register)
-- [Страница чата](https://sprint-2--katatest1.netlify.app/chat)
-- [Страница профиля](https://sprint-2--katatest1.netlify.app/profile)
-- [Страница редактирования профиля](https://sprint-2--katatest1.netlify.app/change-data)
-- [Страница изменения пароля](https://sprint-1--katatest1.netlify.app/change-password)
+- [Главная страница](https://wonderful-marigold-5bf588.netlify.app/login)
+- [Главная регистрации](https://wonderful-marigold-5bf588.netlify.app/register)
+- [Страница чата](https://wonderful-marigold-5bf588.netlify.app/chat)
+- [Страница профиля](https://wonderful-marigold-5bf588.netlify.app/profile)
+- [Страница редактирования профиля](https://wonderful-marigold-5bf588.netlify.app/change-data)
+- [Страница изменения пароля](https://wonderful-marigold-5bf588.netlify.app/change-password)
 
 ## Структура проекта
 
@@ -47,8 +47,6 @@
 - [Страница изменения пароля](https://disk.yandex.ru/i/VwXHDG9c2ayv3Q)
 - [500 ошибка](https://disk.yandex.ru/i/3QE7EC56nuwkDQ)
 - [404 ошибка](https://disk.yandex.ru/i/yzYW8uuNY_1a8Q)
-
-
 
 
 ## Автор
