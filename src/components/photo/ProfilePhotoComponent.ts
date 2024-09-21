@@ -28,7 +28,7 @@ export default class ProfilePhotoComponent extends Block {
 
   override render() {
     return `<div class="profile-photo">
-        <img src="{{avatar}}" alt="Profile Photo" class="profile-photo__image" />
+        <img src="{{avatar}}" alt="Profile Photo" class="profile-photo__image" style="width: 300px; height: 300px;" />
       </div>`;
   }
 }

@@ -31,7 +31,7 @@ export default class ChatItem extends Block {
   }
 
   render() {
-    const { name, avatar, message, unread, current, id, onSelect } = this.props;
+    const { name, avatar, message, id } = this.props;
 
     return `
       <div class="chat-item ${this.props.events}">

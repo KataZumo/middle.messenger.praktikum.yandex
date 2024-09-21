@@ -36,7 +36,7 @@ export default class ProfileInfoChangeComponent extends Block {
   constructor(props: ProfileChangePageProps) {
     const modal = new ModalComponent({
       onApply: (newAvatar: string) => {
-        this.profilePhoto.updateAvatar(newAvatar);  // Обновляем аватар после применения
+        this.profilePhoto.updateAvatar(newAvatar);
       },
     });
 
@@ -162,7 +162,6 @@ export default class ProfileInfoChangeComponent extends Block {
         chatName: updatedUser.display_name,
         phone: updatedUser.phone,
       });
-      location.reload();
       this.router.go('/profile');
     } catch (error) {
       console.error('Ошибка при обновлении профиля:', error);
