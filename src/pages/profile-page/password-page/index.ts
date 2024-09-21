@@ -4,7 +4,7 @@ import { Button } from "../../../components";
 import ProfilePhotoComponent from "../../../components/photo/ProfilePhotoComponent";
 import InputComponent from "../../../components/input";
 import Router from "../../../tools/Router";
-import userAPI  from "../../../api/userApi";
+import userAPI  from "../../../api/userAPI";
 
 interface ChangePasswordPageProps {
   oldPassword: string;

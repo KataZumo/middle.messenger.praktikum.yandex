@@ -4,7 +4,7 @@ import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import InputComponent from "../input";
 import Router from "../../tools/Router";
 import AuthAPI from "../../api/authAPI";
-import UserAPI  from "../../api/userApi";
+import UserAPI  from "../../api/userAPI";
 
 interface UserProfile {
   email: string;

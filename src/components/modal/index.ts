@@ -1,4 +1,4 @@
-import  UserAPI  from "../../api/userApi";
+import userAPI from "../../api/userAPI";
 import Block from "../../tools/Block";
 import "./modal.scss";
 
@@ -51,7 +51,7 @@ export default class ModalComponent extends Block {
     formData.append('avatar', file);
 
     try {
-      const updatedUser = await UserAPI.changeAvatar(formData);
+      const updatedUser = await userAPI.changeAvatar(formData);
       if (updatedUser) {
         sessionStorage.setItem('user', JSON.stringify(updatedUser));
         this.showStatusMessage('Аватарка успешно обновлена!');
