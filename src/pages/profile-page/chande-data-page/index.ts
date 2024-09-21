@@ -37,7 +37,7 @@ export default class ChangeDataPage extends Block {
         type: "submit",
         className: "change-button",
         events: {
-          click: (e: any) => this.handleSaveClick(e),
+          click: (e: Event) => this.handleSaveClick(e),
         },
       }),
     });

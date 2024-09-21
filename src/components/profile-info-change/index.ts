@@ -32,11 +32,12 @@ export default class ProfileInfoChangeComponent extends Block {
   authAPI: AuthAPI;
   router: Router;
   profilePhoto: ProfilePhotoComponent;
-  // userAPI: UserAPI;
 
   constructor(props: ProfileChangePageProps) {
     const modal = new ModalComponent({
-      onApply: () => console.log("File applied"),
+      onApply: (newAvatar: string) => {
+        this.profilePhoto.updateAvatar(newAvatar);  // Обновляем аватар после применения
+      },
     });
 
     const profilePhoto = new ProfilePhotoComponent({
@@ -93,7 +94,6 @@ export default class ProfileInfoChangeComponent extends Block {
     });
     this.modal = modal;
     this.authAPI = new AuthAPI();
-    // this.userAPI = new UserAPI();
       // @ts-expect-error null
     this.router = new Router();
     this.profilePhoto = profilePhoto;
@@ -162,6 +162,7 @@ export default class ProfileInfoChangeComponent extends Block {
         chatName: updatedUser.display_name,
         phone: updatedUser.phone,
       });
+      location.reload();
       this.router.go('/profile');
     } catch (error) {
       console.error('Ошибка при обновлении профиля:', error);

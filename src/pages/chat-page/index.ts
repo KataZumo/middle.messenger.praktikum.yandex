@@ -84,12 +84,13 @@ export default class ChatPage extends Block {
     
     try {
       const chats = await ChatsAPI.getChats();
+      console.log("🚀 ~ ChatPage ~ initChats ~ chats:", chats)
       if (chats.length > 0) {
         const chatItems = chats.map((chat: any) => {
           const chatItem = new ChatItem({
             id: chat.id,
             name: chat.title,
-            message: chat.lastMessage || 'Последнее сообщение',
+            message: chat.last_message.content || 'Последнее сообщение',
             avatar: chat.avatar,
             unread: chat.unreadMessages,
             current: false,
@@ -310,16 +311,17 @@ export default class ChatPage extends Block {
             {{{deleteChatButton}}}
             {{{addUserButton}}}
             {{{removeUserButton}}}
-            {{{selectChatButton}}} <!-- Новая кнопка для выбора чата -->
+            {{{selectChatButton}}}
             <input type="text" placeholder="Поиск" class="chat-page__search-input"/>
           </div>
           <div class="chat-page__chats">
-            {{{chats}}} <!-- Вставка HTML строк чатов -->
+            {{{chats}}}
           </div>
         </div>
         <div class="chat-page__main">
           <div class="chat-page__header">
             <h2>{{currentChatName}}</h2>
+            <h3>{{chatId}}</h3>
           </div>
           <div class="chat-page__messages" id="messages">
             <!-- Здесь будут отображаться сообщения -->

@@ -58,7 +58,8 @@ export default class ProfileInfoComponent extends Block {
       }),
       changeData: new Link({
         text: "Изменить данные",
-        href: "/change-data",
+        // href: "/change-data",
+        href: "/settings",
         className: "chat-page__profile-link",
       }),
       changePassword: new Link({
@@ -80,7 +81,8 @@ export default class ProfileInfoComponent extends Block {
 
   handleLogout() {
     this.authAPI.logout().then(() => {
-      window.location.href = "/login";
+      window.location.href = "/";
+      // window.location.href = "/login";
     }).catch((err) => {
       console.error('Logout failed', err);
     });

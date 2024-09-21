@@ -34,7 +34,7 @@ export default class ProfilePage extends Block {
         phone: user.phone,
         photoUrl: user.avatar, 
       }),
-      Link: new LinkComponent({ href: '/chat', text: 'Назад', className: 'profile-page__nav-btn' }),
+      Link: new LinkComponent({ href: '/messenger', text: 'Назад', className: 'profile-page__nav-btn' }),
     });
     //@ts-expect-error null
     this.router = new Router();
@@ -61,7 +61,7 @@ export default class ProfilePage extends Block {
 
   handleBackClick = (event: Event) => {
     event.preventDefault();
-    this.router.go('/chat');
+    this.router.go('/messenger');
   };
 
   override render() {

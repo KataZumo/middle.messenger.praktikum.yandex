@@ -39,7 +39,6 @@ export default class Block {
 
   private _addEvents(): void {
     const { events = {} } = this.props;
-    // console.log('Adding events:', events); 
     Object.keys(events).forEach((eventName) => {
       if (this._element) {
         this._element.addEventListener(eventName, events[eventName]);
@@ -50,7 +49,6 @@ export default class Block {
   
   private _removeEvents() {
     const { events = {} } = this.props;
-    // console.log('Removing events:', events); 
     Object.entries(events).forEach(([eventName, eventListener]) => {
       if (this._element) {
         this._element.removeEventListener(eventName, eventListener);
@@ -154,7 +152,6 @@ protected componentDidUnmount() {}
   }
 
   private _render(): void {
-    // console.log("Render");
     const propsAndStubs = { ...this.props };
     const _tmpId = Math.floor(100000 + Math.random() * 900000);
     Object.entries(this.children).forEach(([key, child]) => {
@@ -170,7 +167,6 @@ protected componentDidUnmount() {}
     ) as HTMLTemplateElement;
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
 
-    // Comment if you want to see
     Object.values(this.children).forEach((child) => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
       if (stub) {

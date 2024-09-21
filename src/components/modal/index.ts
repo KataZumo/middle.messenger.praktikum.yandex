@@ -7,7 +7,7 @@ interface ModalComponentProps {
   events?: {
     click?: (event: Event) => void;
   };
-  onApply?: () => void;
+  onApply?: (newAvatar: string) => void; 
   [key: string]: unknown;
 }
 
@@ -15,7 +15,6 @@ export default class ModalComponent extends Block {
   private statusMessage: HTMLElement;
   private previewImage: HTMLImageElement;
   private avatarUrl: string | null = null;
-  // userAPI: UserAPI;
 
   constructor(props: ModalComponentProps) {
     super({
@@ -30,7 +29,6 @@ export default class ModalComponent extends Block {
     this.previewImage = document.createElement('img');
     this.previewImage.className = 'modal__preview-image';
     this.previewImage.style.display = 'none';
-    // this.userAPI = new UserAPI();
   }
 
   handleClick(event: Event) {
@@ -57,9 +55,8 @@ export default class ModalComponent extends Block {
         this.showStatusMessage('Аватарка успешно обновлена!');
         this.avatarUrl = updatedUser.avatar;
         this.updatePreviewImage(); 
-        if (this.props.onApply) {
-    //@ts-expect-error null
-          this.props.onApply();  
+        if (typeof this.props.onApply === 'function') {
+          this.props.onApply(updatedUser.avatar);
         }
         this.hide();
       }

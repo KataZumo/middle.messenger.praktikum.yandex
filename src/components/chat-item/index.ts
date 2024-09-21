@@ -31,19 +31,21 @@ export default class ChatItem extends Block {
   }
 
   render() {
-    const { name, avatar, message, unread, current } = this.props;
+    const { name, avatar, message, unread, current, id, onSelect } = this.props;
 
     return `
-      <div class="chat-item ${current ? 'chat-item--current' : ''}">
+      <div class="chat-item ${this.props.events}">
         <div class="chat-item__avatar">
           <img src="${avatar}" alt="Avatar" class="chat-item__avatar-image">
         </div>
         <div class="chat-item__details">
-          <div class="chat-item__name">${name}</div>
+          <div class="chat-item__name">Имя Чата: ${name}</div>
           <div class="chat-item__message">${message}</div>
+          <div class="chat-item__message">ID ЧАТА: ${id}</div>
+
         </div>
-        <div class="chat-item__unread">${unread ?? ''}</div>
-      </div>
-    `;
-  }
-}
+        </div>
+        `;
+      }
+    }
+    // <div class="chat-item__unread">${unread ?? ''}</div>

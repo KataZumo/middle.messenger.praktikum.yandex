@@ -54,7 +54,8 @@ export default class LoginPage extends Block {
       registerLink: new Link({
         text: "Нет аккаунта?",
         className: "register-link",
-        href: "/register",
+        // href: "/register",
+        href: "/sign-up"
       }),
     });
 
@@ -62,7 +63,7 @@ export default class LoginPage extends Block {
       if (user) {
         this.isUserAuthenticated = true;
         const router = Router.getInstance();
-        router.go('/chat');
+        router.go('/messenger');
       }
     });
   }
@@ -73,7 +74,7 @@ export default class LoginPage extends Block {
 
     if (this.isUserAuthenticated) {
       const router = Router.getInstance();
-      router.go('/chat');
+      router.go('/messenger');
       return;
     }
 

@@ -80,7 +80,8 @@ export default class RegisterPage extends Block {
       loginLink: new Link({
         text: "Войти",
         className: "register-link",
-        href: "/login",
+        href: "/",
+        // href: "/login",
       }),
       errorMessage: new TextComponent({
         text: '',
@@ -91,7 +92,7 @@ export default class RegisterPage extends Block {
     AuthController.getUser().then((user) => {
       if (user) {
         const router = Router.getInstance();
-        router.go('/chat');
+        router.go('/messenger');
       }
     });
   }

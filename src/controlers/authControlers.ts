@@ -15,11 +15,11 @@ class AuthController {
           if (user && user.id) {
             await this.fetchUserData();
             const router = Router.getInstance();
-            router.go('/chat');
+            router.go('/messenger');
           } else {
             await this.fetchUserData(); 
             const router = Router.getInstance();
-            router.go('/chat'); 
+            router.go('/messenger'); 
           }
         } catch (error) {
           console.error('ошибка login', error);
@@ -32,7 +32,7 @@ class AuthController {
           if (user && user.id) { 
             await this.fetchUserData();
             const router = Router.getInstance();
-            router.go('/chat');
+            router.go('/messenger');
           } else {
             throw new Error('нет данных пользователя');
           }

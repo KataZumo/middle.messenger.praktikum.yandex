@@ -110,7 +110,7 @@ class ChatsController {
       if (!token) {
         throw new Error('Не удалось получить токен чата');
       }
-      this.router.go(`/chat/${chatId}`);
+      this.router.go(`/messenger/${chatId}`);
     } catch (error) {
       console.error(`Ошибка при выборе чата ${chatId}:`, error);
       alert('Не удалось выбрать чат');

@@ -13,12 +13,12 @@ export const appRouter = new Router("app");
 document.addEventListener("DOMContentLoaded", () => {
   appRouter
     .use('/', LoginPage)
-    .use('/login', LoginPage)
-    .use('/register', RegisterPage)
+    // .use('/login', LoginPage)
+    .use('/sign-up', RegisterPage)
     .use('/change-password', ChangePasswordPage)
-    .use('/chat', ChatPage)
+    .use('/messenger', ChatPage)
     .use('/profile', ProfilePage)
-    .use("/change-data", ChangeDataPage)
+    .use("/settings", ChangeDataPage)
     .use("/error404", ErrorPage)
     .use("/error500", ErrorPage500)
     .start();

@@ -1,7 +1,7 @@
 export function submitForm(event: Event) {
   event.preventDefault();
   console.log("Form submitted");
-  history.pushState({}, "", "/chat");
+  history.pushState({}, "", "/messenger");
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
