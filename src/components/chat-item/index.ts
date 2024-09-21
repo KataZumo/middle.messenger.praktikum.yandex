@@ -1,4 +1,5 @@
-import Block from "../../tools/Block";
+// import Block from "../../tools/Block";
+import Block  from "../../tools/Block";
 import "./chat-item.scss";
 
 interface ChatItemProps {
@@ -36,7 +37,7 @@ export default class ChatItem extends Block {
     return `
       <div class="chat-item ${this.props.events}">
         <div class="chat-item__avatar">
-          <img src="${avatar}" alt="Avatar" class="chat-item__avatar-image">
+          <img src="${avatar || `https://habrastorage.org/webt/5b/a7/42/5ba7425c10ae1768628810.jpeg`}" alt="Avatar" class="chat-item__avatar-image">
         </div>
         <div class="chat-item__details">
           <div class="chat-item__name">Имя Чата: ${name}</div>

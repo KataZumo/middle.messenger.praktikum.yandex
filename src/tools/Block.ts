@@ -1,7 +1,7 @@
 import Handlebars from "handlebars";
 import EventBus from "./EventBus";
 
-export interface IProps {
+interface IProps {
   __id?: string;
   events?: { [key: string]: (e: Event) => void };
   lists?: Block[];
@@ -9,23 +9,23 @@ export interface IProps {
   [key: string]: unknown;
 }
 
-export default class Block {
+abstract class Block<Props extends IProps = IProps> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
     FLOW_CDU: "flow:component-did-update",
     FLOW_RENDER: "flow:render",
-    FLOW_CDUM: 'flow:component-did-unmount',
+    FLOW_CDUM: "flow:component-did-unmount",
   };
 
   private _element: HTMLElement | null = null;
   private _id: number = Math.floor(100000 + Math.random() * 900000);
-  props: IProps;
-  children: { [key: string]: Block };
-  lists: { [key: string]: unknown[] }; 
+  props: Props;
+  children: { [key: string]: Block<any> };
+  lists: { [key: string]: unknown[] };
   private eventBus: () => EventBus;
 
-  constructor(propsWithChildren: IProps = {}) {
+  constructor(propsWithChildren: Props = {} as Props) {
     const eventBus = new EventBus();
     const { props, children, lists } =
       this._getChildrenPropsAndProps(propsWithChildren);
@@ -45,9 +45,8 @@ export default class Block {
       }
     });
   }
-  
-  
-  private _removeEvents() {
+
+  private _removeEvents(): void {
     const { events = {} } = this.props;
     Object.entries(events).forEach(([eventName, eventListener]) => {
       if (this._element) {
@@ -55,14 +54,12 @@ export default class Block {
       }
     });
   }
-  
 
   private _registerEvents(eventBus: EventBus): void {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this),
-  );
+    eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -76,21 +73,22 @@ export default class Block {
       child.dispatchComponentDidMount();
     });
   }
-  private _componentDidUnmount() {
+
+  private _componentDidUnmount(): void {
     this.componentDidUnmount();
-
     Object.values(this.children).forEach((child) => {
-        child.dispatchComponentDidUnmount();
+      child.dispatchComponentDidUnmount();
     });
-}
+  }
 
-protected componentDidUnmount() {}
+  protected componentDidUnmount(): void {}
 
   componentDidMount(): void {}
 
   dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
+
   dispatchComponentDidUnmount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDUM);
   }
@@ -107,13 +105,13 @@ protected componentDidUnmount() {}
     return true;
   }
 
-  private _getChildrenPropsAndProps(propsAndChildren: IProps): {
-    children: { [key: string]: Block };
-    props: IProps;
+  private _getChildrenPropsAndProps(propsAndChildren: Props): {
+    children: { [key: string]: Block<any> };
+    props: Props;
     lists: { [key: string]: unknown[] };
   } {
-    const children: { [key: string]: Block } = {};
-    const props: IProps = {};
+    const children: { [key: string]: Block<any> } = {};
+    const props: Partial<Props> = {};
     const lists: { [key: string]: unknown[] } = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
@@ -122,24 +120,24 @@ protected componentDidUnmount() {}
       } else if (Array.isArray(value)) {
         lists[key] = value;
       } else {
-        props[key] = value;
+        (props as any)[key] = value;
       }
     });
 
-    return { children, props, lists };
+    return { children, props: props as Props, lists };
   }
 
   private addAttributes(): void {
     const { attr = {} } = this.props;
 
     Object.entries(attr).forEach(([key, value]) => {
-      if (this._element && typeof value === 'string') {
+      if (this._element && typeof value === "string") {
         this._element.setAttribute(key, value);
       }
     });
   }
 
-  setProps = (nextProps: Partial<IProps>): void => {
+  setProps = (nextProps: Partial<Props>): void => {
     if (!nextProps) {
       return;
     }
@@ -152,8 +150,9 @@ protected componentDidUnmount() {}
   }
 
   private _render(): void {
-    const propsAndStubs = { ...this.props };
+    const propsAndStubs: { [key: string]: any } = { ...this.props };
     const _tmpId = Math.floor(100000 + Math.random() * 900000);
+
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
@@ -162,9 +161,7 @@ protected componentDidUnmount() {}
       propsAndStubs[key] = `<div data-id="__l_${_tmpId}"></div>`;
     });
 
-    const fragment = this._createDocumentElement(
-      "template",
-    ) as HTMLTemplateElement;
+    const fragment = this._createDocumentElement("template") as HTMLTemplateElement;
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
 
     Object.values(this.children).forEach((child) => {
@@ -178,9 +175,7 @@ protected componentDidUnmount() {}
     });
 
     Object.entries(this.lists).forEach(([list]) => {
-      const listCont = this._createDocumentElement(
-        "template",
-      ) as HTMLTemplateElement;
+      const listCont = this._createDocumentElement("template") as HTMLTemplateElement;
       (list as unknown as unknown[]).forEach((item) => {
         if (item instanceof Block) {
           const content = item.getContent();
@@ -201,30 +196,28 @@ protected componentDidUnmount() {}
     if (this._element && newElement) {
       this._removeEvents();
       this._element.replaceWith(newElement);
-  }
-  this._element = newElement as HTMLElement;
-  this._addEvents();
-  this.addAttributes();
+    }
+    this._element = newElement as HTMLElement;
+    this._addEvents();
+    this.addAttributes();
   }
 
-  render(): string {
-    return "";
-  }
+  abstract render(): string;
 
   getContent(): HTMLElement | null {
     return this.element;
   }
 
-  private _makePropsProxy(props: IProps): IProps {
+  private _makePropsProxy(props: Props): Props {
     const self = this;
-
-    return new Proxy(props, {
-      get(target: IProps, prop: string) {
+  
+    return new Proxy(props as Record<string, any>, { 
+      get(target: Record<string, any>, prop: string) {
         const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;
       },
-      set(target: IProps, prop: string, value: unknown) {
-        const oldTarget = { ...target };
+      set(target: Record<string, any>, prop: string, value: unknown) {
+        const oldTarget = { ...target }; 
         target[prop] = value;
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
@@ -232,8 +225,9 @@ protected componentDidUnmount() {}
       deleteProperty() {
         throw new Error("No access");
       },
-    });
+    }) as Props;
   }
+  
 
   private _createDocumentElement(tagName: string): HTMLElement {
     return document.createElement(tagName);
@@ -251,3 +245,5 @@ protected componentDidUnmount() {}
     }
   }
 }
+
+export default Block
