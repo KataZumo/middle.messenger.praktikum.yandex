@@ -32,6 +32,7 @@ export default class LoginPage extends Block {
         onChange: (value: string) => {
           console.log("Login:", value);
         },
+        placeholder: "Логин"
       }),
       passwordInput: new InputComponent({
         type: "password",
@@ -39,6 +40,7 @@ export default class LoginPage extends Block {
         onChange: (value: string) => {
           console.log("Password:", value);
         },
+        placeholder: "Пароль"
       }),
       submitButton: new Button({
         text: "Авторизоваться",

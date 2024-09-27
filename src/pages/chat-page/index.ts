@@ -18,10 +18,17 @@ export default class ChatPage extends Block {
   private webSocket: ChatWebSocket | null = null;
 
   constructor(props: ChatPageProps = {}) {
-    console.log('ChatPage Props:', props);
+            const userData = getUserData();
+            console.log("🚀 ~ ChatPage ~ constructor ~ userData:", userData)
+            const userId = userData ? userData.id : 'Неизвестный ID';
+            const userName = userData ? `${userData.first_name} ${userData.second_name}`.trim() : 'Неизвестное Имя';
+            const loginName = userData ? userData.login : 'Вы не зарегистрированы'
 
     super({
       ...props,
+      userId: userId, 
+      userName: userName,
+      loginName: loginName,
       profileLink: new Link({
         text: 'Профиль',
         href: '/profile',
@@ -79,25 +86,23 @@ export default class ChatPage extends Block {
     this.initChats();
   }
   
-
-  async initChats() {
+  async initChats() {  
     
     try {
       const chats = await ChatsAPI.getChats();
       console.log("🚀 ~ ChatPage ~ initChats ~ chats:", chats)
-      if (chats.length > 0) {
+      if (chats.length) {
         const chatItems = chats.map((chat: any) => {
           const chatItem = new ChatItem({
             id: chat.id,
             name: chat.title,
-            message: chat.last_message.content || 'Последнее сообщение',
+            message: chat.last_message || `Cообщение`,
             avatar: chat.avatar,
             unread: chat.unreadMessages,
             current: false,
           }).render();
           return chatItem;
         });
-
         this.setProps({ chats: chatItems.join('') });
       } else {
         this.setProps({ chats: '<p>Нет доступных чатов</p>' });
@@ -111,57 +116,83 @@ export default class ChatPage extends Block {
     return this.state.currentChatId;
   }
 
-  async handleSelectChatClick(event: Event) {
-    event.preventDefault();
-    const chatIdInput = prompt('Введите ID чата для подключения');
-    const chatId = parseInt(chatIdInput || '', 10);
-    const data = getUserData()?.id as number
+async handleSelectChatClick(event: Event) {
+  event.preventDefault();
+  const chatIdInput = prompt('Введите ID чата для подключения');
+  const chatId = parseInt(chatIdInput || '', 10);
+  const userId = getUserData()?.id as number;
+  const userName = getUserData()?.first_name as string;
 
+  if (isNaN(chatId) || chatId <= 0) {
+      alert('Некорректный ID чата');
+      return;
+  }
 
-    if (isNaN(chatId) || chatId <= 0) {
-        alert('Некорректный ID чата');
-        console.error('Некорректный ID чата:', chatIdInput);
-        return;
-    }
-    console.log('Выбранный chatId:', chatId);
-    console.log('Текущий userId:', data);
+  console.log('Выбранный chatId:', chatId);
+  console.log('Текущий userId:', userId);
 
-    try {
-        const response = await ChatsAPI.getChatToken(chatId);
-        const token = response.token;
-        if (!token) {
-            throw new Error('Токен чата не получен');
-        }
+  try {
+      const response = await ChatsAPI.getChatToken(chatId);
+      const token = response.token;
+      if (!token) {
+          throw new Error('Токен чата не получен');
+      }
 
-        console.log('Токен чата:', token);
+      console.log('Токен чата:', token);
 
+      const users = await ChatsAPI.getChatUsers(chatId);
+      console.log('Пользователи чата:', users);
 
-        if (this.webSocket) {
-            this.webSocket.close();
-        }
+      const userMap: { [key: number]: string } = {};
+      users.forEach((user: any) => {
+          userMap[user.id] = `${user.first_name} ${user.second_name}`.trim();
+      });
 
-        this.webSocket = new ChatWebSocket(data, chatId, token);
+      if (this.webSocket) {
+          this.webSocket.close();
+      }
 
-        this.webSocket.on('message', (data: any) => {
-            console.log('Новое сообщение:', data);
-            this.addMessageToUI(data);
-        });
+      this.webSocket = new ChatWebSocket(userId, chatId, token, userName);
 
+      await this.webSocket.connect();
 
-        this.webSocket.on('notification', (data: any) => {
-            console.log("🚀 ~ ChatPage ~ this.webSocket.on ~ data:", data)
-            console.log('Уведомление:', data);
-        });
+      this.webSocket.on('message', (data: any) => {
+          console.log('Новое сообщение:', data);
+          const senderName = userMap[data.user_id] || 'Неизвестный пользователь';
+          this.addMessageToUI({
+              userId: data.user_id,
+              userName: senderName,
+              content: data.content,
+              time: data.time,
+          });
+      });
 
+      this.webSocket.on('oldMessages', (messages: any[]) => {
+          console.log('Получены старые сообщения:', messages);
+          messages.forEach((message) => {
+              const senderName = userMap[message.user_id] || 'Неизвестный пользователь';
+              this.addMessageToUI({
+                  userId: message.user_id,
+                  userName: senderName,
+                  content: message.content,
+                  time: message.time,
+              });
+          });
+      });
+      
+      const unreadResponse = await ChatsAPI.getNewMessagesCount(chatId);
+      const unreadCount = unreadResponse.unread_count;
+      console.log('Количество непрочитанных сообщений:', unreadCount);
 
-        this.state.currentChatId = chatId;
-        this.setProps({ currentChatName: `Чат ${chatId}` });
-    } catch (error: any) {
-        console.error('Ошибка при получении токена чата:', error);
-        alert('Не удалось подключиться к чату');
-    }
+      this.webSocket.getOldMessages(0);
+
+      this.state.currentChatId = chatId;
+      this.setProps({ currentChatName: `Чат ${chatId}` });
+  } catch (error: any) {
+      console.error('Ошибка при подключении к чату:', error);
+      alert('Не удалось подключиться к чату');
+  }
 }
-
 
   handleCreateChatClick(event: Event) {
     event.preventDefault();
@@ -274,16 +305,16 @@ export default class ChatPage extends Block {
     event.preventDefault();
     const messageInput = document.getElementById('message') as HTMLInputElement;
     const message = messageInput?.value.trim();
+    const userData = getUserData()
+    console.log("🚀 ~ ChatPage ~ handleSendMessageClick ~ userData:", userData)
+  
     if (!message) {
       alert('Сообщение не может быть пустым');
       return;
     }
+  
     if (this.webSocket) {
       this.webSocket.sendMessage(message);
-      this.addMessageToUI({
-        userId: this.props.userId,
-        content: message,
-      });
       messageInput.value = '';
     } else {
       alert('Не подключено к чату');
@@ -293,13 +324,17 @@ export default class ChatPage extends Block {
   addMessageToUI(data: any) {
     const messagesContainer = document.getElementById('messages');
     if (messagesContainer) {
-      const messageElement = document.createElement('div');
-      messageElement.className = 'message';
-      messageElement.textContent = `${data.userId}: ${data.content}`;
-      messagesContainer.appendChild(messageElement);
-      messagesContainer.scrollTop = messagesContainer.scrollHeight; 
-    }
-  }
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message';
+
+        const userName = data.userName ? data.userName : 'Неизвестный пользователь';
+        const time = new Date(data.time).toLocaleString();
+        messageElement.textContent = `${userName} [${time}]: ${data.content}`;
+
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight; 
+    } 
+}
 
   render(): string {
     return `
@@ -307,6 +342,11 @@ export default class ChatPage extends Block {
         <div class="chat-page__sidebar">
           <div class="chat-page__sidebar-header">
             {{{profileLink}}}
+             <div class="user-info">
+                <p>Твой ID: {{userId}}</p>
+                <p>Твое имя: {{userName}}</p>
+                <p>Твой логин: {{loginName}}</p>
+            </div>
             {{{createChatButton}}}
             {{{deleteChatButton}}}
             {{{addUserButton}}}

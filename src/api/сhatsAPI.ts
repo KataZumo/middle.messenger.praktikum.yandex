@@ -44,6 +44,9 @@ class ChatsAPI extends BaseAPIData {
         body: JSON.stringify({ chatId }),
       });
   }
+  async getUnreadCount(chatId: number): Promise<any> {
+    return await this.http.get(`/${chatId}/new`);
+}
 }
   
 export default new ChatsAPI;

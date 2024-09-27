@@ -28,10 +28,6 @@ export default class ProfileInfoComponent extends Block {
     super({
       ...props,
       profilePhoto,
-      name: new Title({
-        className: "profile-info__value",
-        text: props.name 
-      }),
       emailInfo: new Title({
         className: "profile-info__value",
         text: props.email
@@ -92,7 +88,9 @@ export default class ProfileInfoComponent extends Block {
     return `<div class="profile-page">
               <div class="profile-page__content">
                 {{{profilePhoto}}}
-                {{name}}
+                <div class="profile-main-info__user-name" style="margin-top: 30px; font-weight: bold;">
+                Имя Пользователя: {{name}}
+              </div>
                   </div>
                     <div class="profile-main-info__item">
                     <span class="profile-main-info__label">Имейл:</span>

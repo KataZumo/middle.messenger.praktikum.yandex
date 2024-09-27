@@ -22,6 +22,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("First Name:", value);
         },
+        placeholder: "Имя"
       }),
       secondNameInput: new InputComponent({
         type: "text",
@@ -29,6 +30,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("Second Name:", value);
         },
+        placeholder: "Фамилия"
       }),
       loginInput: new InputComponent({
         type: "login",
@@ -36,6 +38,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("Login:", value);
         },
+        placeholder: "Имя в чате"
       }),
       emailInput: new InputComponent({
         type: "email",
@@ -43,6 +46,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("Email:", value);
         },
+        placeholder: "Email"
       }),
       passwordInput: new InputComponent({
         type: "password",
@@ -50,6 +54,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("Password:", value);
         },
+        placeholder: "Пароль"
       }),
       passwordRepeatInput: new InputComponent({
         type: "password",
@@ -57,6 +62,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("Password Repeat:", value);
         },
+        placeholder: "Повторите пароль"
       }),
       phoneInput: new InputComponent({
         type: "phone",
@@ -64,6 +70,7 @@ export default class RegisterPage extends Block {
         onChange: (value: string) => {
           console.log("Phone:", value);
         },
+        placeholder: "Номер телефона"
       }),
       submitButton: new Button({
         text: "Зарегистрироваться",

@@ -8,8 +8,6 @@ interface ProfilePhotoProps {
 export default class ProfilePhotoComponent extends Block {
   constructor(props: ProfilePhotoProps) {
     const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-    // const userAvatar = user.avatar || `https://habrastorage.org/webt/5b/a7/42/5ba7425c10ae1768628810.jpeg`;
-    // const userAvatar = user.avatar;
     const avatarUrl = `https://ya-praktikum.tech/api/v2/resources/${user.avatar}`;
     
     super({

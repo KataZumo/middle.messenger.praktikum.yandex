@@ -1,4 +1,3 @@
-// import Block from "../../tools/Block";
 import Block  from "../../tools/Block";
 import "./chat-item.scss";
 
@@ -32,7 +31,7 @@ export default class ChatItem extends Block {
   }
 
   render() {
-    const { name, avatar, message, id } = this.props;
+    const { name, avatar, id } = this.props;
 
     return `
       <div class="chat-item ${this.props.events}">
@@ -41,12 +40,10 @@ export default class ChatItem extends Block {
         </div>
         <div class="chat-item__details">
           <div class="chat-item__name">Имя Чата: ${name}</div>
-          <div class="chat-item__message">${message}</div>
           <div class="chat-item__message">ID ЧАТА: ${id}</div>
-
-        </div>
-        </div>
-        `;
+          
+          </div>
+          </div>
+          `;
+        }
       }
-    }
-    // <div class="chat-item__unread">${unread ?? ''}</div>
