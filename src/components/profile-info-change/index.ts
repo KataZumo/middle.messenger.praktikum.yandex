@@ -2,6 +2,19 @@ import Block from "../../tools/Block";
 import ModalComponent from "../modal";
 import ProfilePhotoComponent from "../photo/ProfilePhotoComponent";
 import InputComponent from "../input";
+import Router from "../../tools/Router";
+import AuthAPI from "../../api/authAPI";
+import UserAPI  from "../../api/userAPI";
+
+interface UserProfile {
+  email: string;
+  login: string;
+  first_name: string;
+  second_name: string;
+  display_name?: string;
+  phone: string;
+  avatar?: string;
+}
 
 interface ProfileChangePageProps {
   name: string;
@@ -13,95 +26,86 @@ interface ProfileChangePageProps {
   phone: string;
   photoUrl: string;
 }
+
 export default class ProfileInfoChangeComponent extends Block {
   modal: ModalComponent;
+  authAPI: AuthAPI;
+  router: Router;
+  profilePhoto: ProfilePhotoComponent;
 
   constructor(props: ProfileChangePageProps) {
-    // Инициализация модального компонента
     const modal = new ModalComponent({
-      onApply: () => console.log("File applied"),
+      onApply: (newAvatar: string) => {
+        this.profilePhoto.updateAvatar(newAvatar);
+      },
     });
 
-    // Инициализация компонента фото профиля
     const profilePhoto = new ProfilePhotoComponent({
-      avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5y_CQNi9oiqn96_0204tGgLQuUxigGKLe1w&s",
+      avatar: props.photoUrl,
       onClick: () => modal.show(),
     });
 
-    // Инициализация полей ввода
-    const emailInput = new InputComponent({
-      type: 'email',
-      className: 'profile-info__input',
-      value: 'qwerty@gmail.com',
-      placeholder: 'Введите ваш имейл',
-      onChange: (value) => this.onInputChange('email', value),
-    });
-
-    const loginInput = new InputComponent({
-      type: 'text',
-      className: 'profile-info__input',
-      value: 'Grogi',
-      placeholder: 'Введите ваш логин',
-      onChange: (value) => this.onInputChange('login', value),
-    });
-
-    const firstNameInput = new InputComponent({
-      type: 'text',
-      className: 'profile-info__input',
-      value: 'LOLOLO',
-      placeholder: 'Введите ваше имя',
-      onChange: (value) => this.onInputChange('firstName', value),
-    });
-
-    const secondNameInput = new InputComponent({
-      type: 'text',
-      className: 'profile-info__input',
-      value: 'KEK',
-      placeholder: 'Введите вашу фамилию',
-      onChange: (value) => this.onInputChange('secondName', value),
-    });
-
-    const chatNameInput = new InputComponent({
-      type: 'text',
-      className: 'profile-info__input',
-      value: 'infinity',
-      placeholder: 'Введите ваше имя в чате',
-      onChange: (value) => this.onInputChange('chatName', value),
-    });
-
-    const phoneInput = new InputComponent({
-      type: 'phone',
-      className: 'profile-info__input',
-      value: '1-2-3-4-5-6',
-      placeholder: 'Введите ваш номер телефона',
-      onChange: (value) => this.onInputChange('phone', value),
-    });
-
-    // Вызов конструктора родительского класса
     super({
       ...props,
       modal,
       profilePhoto,
-      emailInput,
-      loginInput,
-      firstNameInput,
-      secondNameInput,
-      chatNameInput,
-      phoneInput,
+      emailInput: new InputComponent({
+        type: 'email',
+        className: 'profile-info__input',
+        value: props.email || '',
+        placeholder: 'Введите ваш имейл',
+        onChange: (value) => this.onInputChange('email', value),
+      }),
+      loginInput: new InputComponent({
+        type: 'text',
+        className: 'profile-info__input',
+        value: props.loginName || '',
+        placeholder: 'Введите ваш логин',
+        onChange: (value) => this.onInputChange('loginName', value),
+      }),
+      firstNameInput: new InputComponent({
+        type: 'text',
+        className: 'profile-info__input',
+        value: props.firstName || '',
+        placeholder: 'Введите ваше имя',
+        onChange: (value) => this.onInputChange('firstName', value),
+      }),
+      secondNameInput: new InputComponent({
+        type: 'text',
+        className: 'profile-info__input',
+        value: props.secondName || '',
+        placeholder: 'Введите вашу фамилию',
+        onChange: (value) => this.onInputChange('secondName', value),
+      }),
+      chatNameInput: new InputComponent({
+        type: 'text',
+        className: 'profile-info__input',
+        value: props.chatName || '',
+        placeholder: 'Введите ваше имя в чате',
+        onChange: (value) => this.onInputChange('chatName', value),
+      }),
+      phoneInput: new InputComponent({
+        type: 'text',
+        className: 'profile-info__input',
+        value: props.phone || '',
+        placeholder: 'Введите ваш номер телефона',
+        onChange: (value) => this.onInputChange('phone', value),
+      }),
     });
-
-    // Сохранение модального компонента
     this.modal = modal;
+    this.authAPI = new AuthAPI();
+      // @ts-expect-error null
+    this.router = new Router();
+    this.profilePhoto = profilePhoto;
+    this.loadUserProfile();
   }
 
   onInputChange(field: string, value: string) {
     if (this.validateInput(field, value)) {
       this.setProps({ [field]: value });
-    }
-  }
+    }}
 
   validateInput(field: string, value: string): boolean {
-    // Добавить проверку ввода для каждого поля
     switch (field) {
       case 'email':
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -109,15 +113,59 @@ export default class ProfileInfoChangeComponent extends Block {
         return /^\d{1}-\d{1}-\d{1}-\d{1}-\d{1}-\d{1}$/.test(value);
       default:
         return true;
+    }}
+
+    updatePhoto() {
+      const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      console.log("🚀 ~ ProfileInfoChangeComponent ~ updatePhoto ~ user:", user)
+      this.profilePhoto.setProps({ avatar: user.avatar });
+    }
+
+  async loadUserProfile() {
+    try {
+      const user = await this.authAPI.getUser();
+      this.setProps({
+        email: user.email,
+        loginName: user.login,
+        firstName: user.first_name,
+        secondName: user.second_name,
+        chatName: user.display_name || '',
+        phone: user.phone,
+        photoUrl: user.avatar || user.photoUrl
+      });
+    } catch (error) {
+      console.error('Ошибка при загрузке профиля:', error);
     }
   }
 
-  handleSaveClick(event: Event) {
+  async handleSaveClick(event: Event) {
     event.preventDefault();
-    // Логика сохранения изменений, например, отправка данных на сервер
-    console.log('Сохраненные данные:', this.props);
-    // Переход на страницу профиля после сохранения
-    window.location.href = '/profile';
+
+    const data: Partial<UserProfile> = {
+      email: this.props.email as string,
+      login: this.props.loginName as string,
+      first_name: this.props.firstName as string,
+      second_name: this.props.secondName as string,
+      display_name: this.props.chatName as string,
+      phone: this.props.phone as string,
+    };
+
+    try {
+      const updatedUser: any = await UserAPI.updateProfile(data as any);
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+      this.setProps({
+        email: updatedUser.email,
+        loginName: updatedUser.login,
+        firstName: updatedUser.first_name,
+        secondName: updatedUser.second_name,
+        chatName: updatedUser.display_name,
+        phone: updatedUser.phone,
+      });
+      this.router.go('/profile');
+    } catch (error) {
+      console.error('Ошибка при обновлении профиля:', error);
+    }
   }
 
   override render() {

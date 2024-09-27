@@ -15,34 +15,39 @@ interface ChangeDataPageProps {
 }
 
 export default class ChangeDataPage extends Block {
+  private profileInfo: ProfileInfoChangeComponent;
+
   constructor(props: ChangeDataPageProps) {
+    const profileInfo = new ProfileInfoChangeComponent({
+      name: props.name,
+      email: props.email,
+      loginName: props.loginName,
+      firstName: props.firstName,
+      secondName: props.secondName,
+      chatName: props.chatName,
+      phone: props.phone,
+      photoUrl: props.photoUrl,
+    });
+
     super({
       ...props,
-      profile: new ProfileInfoChangeComponent({
-        name: props.name,
-        email: props.email,
-        loginName: props.loginName,
-        firstName: props.firstName,
-        secondName: props.secondName,
-        chatName: props.chatName,
-        phone: props.phone,
-        photoUrl: props.photoUrl,
-      }),
+      profile: profileInfo,
       submitButton: new Button({
         text: "Сохранить",
         type: "submit",
         className: "change-button",
         events: {
-          click: (e: any) => this.handleLoginClick(e),
+          click: (e: Event) => this.handleSaveClick(e),
         },
       }),
     });
+
+    this.profileInfo = profileInfo; 
   }
 
-  handleLoginClick(event: Event) {
+  handleSaveClick(event: Event) {
     event.preventDefault();
-    history.pushState({}, "", "/profile");
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    this.profileInfo.handleSaveClick(event);
   }
 
   override render() {

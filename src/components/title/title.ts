@@ -9,6 +9,8 @@ export default class Title extends Block {
   constructor(props: TitleProps) {
     super({
       ...props,
+     onClick: () => {      
+     }
     });
   }
 

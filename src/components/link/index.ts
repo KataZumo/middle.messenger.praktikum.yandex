@@ -4,6 +4,9 @@ interface LinkProps {
   text: string;
   href: string;
   className?: string;
+  events?: {
+    click: (event: Event) => void;
+  };
 }
 
 export default class LinkComponent extends Block {

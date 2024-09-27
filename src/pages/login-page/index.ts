@@ -4,6 +4,9 @@ import InputComponent from "../../components/input";
 import Link from "../../components/link";
 import "./login-page.scss";
 import Title from "../../components/title/title";
+import { SigninData } from "../../api/type";
+import AuthController from "../../controlers/authControlers"
+import Router from "../../tools/Router";
 
 interface LoginPageProps {
   title?: Title;
@@ -13,7 +16,10 @@ interface LoginPageProps {
   registerLink?: Link;
   [key: string]: unknown;
 }
+
 export default class LoginPage extends Block {
+  private isUserAuthenticated: boolean = false;
+
   constructor(props: LoginPageProps = {}) {
     super({
       ...props,
@@ -21,11 +27,12 @@ export default class LoginPage extends Block {
         text: "Вход",
       }),
       usernameInput: new InputComponent({
-        type: "email",
+        type: "login",
         className: "input",
         onChange: (value: string) => {
-          console.log("Email:", value);
+          console.log("Login:", value);
         },
+        placeholder: "Логин"
       }),
       passwordInput: new InputComponent({
         type: "password",
@@ -33,6 +40,7 @@ export default class LoginPage extends Block {
         onChange: (value: string) => {
           console.log("Password:", value);
         },
+        placeholder: "Пароль"
       }),
       submitButton: new Button({
         text: "Авторизоваться",
@@ -42,21 +50,48 @@ export default class LoginPage extends Block {
           click: (event: Event) => {
             this.handleLoginClick(event);
             event.preventDefault();
-            console.log("Клик");
-          }}
+          }
+        }
       }),
       registerLink: new Link({
         text: "Нет аккаунта?",
         className: "register-link",
-        href: "/register",
+        // href: "/register",
+        href: "/sign-up"
       }),
     });
+
+    AuthController.getUser().then((user) => {
+      if (user) {
+        this.isUserAuthenticated = true;
+        const router = Router.getInstance();
+        router.go('/messenger');
+      }
+    });
   }
+  
 
   handleLoginClick(event: Event) {
     event.preventDefault();
-    history.pushState({}, "", "/chat");
-    window.dispatchEvent(new PopStateEvent("popstate"));
+
+    if (this.isUserAuthenticated) {
+      const router = Router.getInstance();
+      router.go('/messenger');
+      return;
+    }
+
+    const login = (this.children.usernameInput as InputComponent).getValue();
+    const password = (this.children.passwordInput as InputComponent).getValue();
+
+    if (!login || !password) {
+      console.error('Login and password are required.');
+      return;
+    }
+
+    const data: SigninData = { login, password };
+    AuthController.login(data)
+      .then(() => console.log('User logged in successfully'))
+      .catch(error => console.error('Login failed:', error));
   }
 
   render() {
@@ -77,3 +112,5 @@ export default class LoginPage extends Block {
     `;
   }
 }
+
+

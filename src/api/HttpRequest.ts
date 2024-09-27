@@ -7,7 +7,17 @@ interface CustomHeaders {
 interface Params {
   [key: string]: string | number | boolean;
 }
-class HttpRequest {
+
+interface IRequestOptions {
+  data?: unknown;
+  headers?: CustomHeaders;
+  withCredentials?: boolean;
+  responseType?: XMLHttpRequestResponseType;
+  method?: HttpMethod;
+  timeout?: number;
+}
+
+export class HttpRequest {
   private baseURL: string;
 
   constructor(baseURL: string) {
@@ -18,7 +28,7 @@ class HttpRequest {
     return Object.entries(params)
       .map(
         ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+          `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
       )
       .join("&");
   }
@@ -26,21 +36,38 @@ class HttpRequest {
   private request<T>(
     method: HttpMethod,
     url: string,
-    body: unknown = null,
-    headers: CustomHeaders = {},
+    options: IRequestOptions = {},
   ): Promise<T> {
+    const {
+      data,
+      headers = {},
+      withCredentials = true,
+      responseType = 'json',
+      timeout = 5000,
+    } = options;
+
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open(method, `${this.baseURL}${url}`);
-      xhr.setRequestHeader("Content-Type", "application/json");
+      const fullURL = `${this.baseURL}${url}`;
+
+      if (method === 'GET' && data) {
+        const queryString = HttpRequest.createQueryString(data as Params);
+        url += `?${queryString}`;
+      }
+
+      xhr.open(method, fullURL);
 
       Object.entries(headers).forEach(([key, value]) => {
-        xhr.setRequestHeader(key, value as string);
+        xhr.setRequestHeader(key, value);
       });
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(JSON.parse(xhr.responseText));
+          if (responseType === 'json') {
+            resolve(xhr.response); 
+          } else {
+            resolve(xhr.responseText as any); 
+          }
         } else {
           reject(
             new Error(
@@ -50,12 +77,21 @@ class HttpRequest {
         }
       };
 
-      xhr.onerror = () => reject(new Error("Network error"));
+      xhr.onabort = reject;
+      xhr.onerror = reject;
+      xhr.ontimeout = reject;
 
-      if (body) {
-        xhr.send(JSON.stringify(body));
-      } else {
+      xhr.timeout = timeout;
+      xhr.responseType = responseType;
+      xhr.withCredentials = withCredentials;
+
+      if (method === 'GET' || !data) {
         xhr.send();
+      } else if (data instanceof FormData) {
+        xhr.send(data);
+      } else {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
       }
     });
   }
@@ -64,25 +100,37 @@ class HttpRequest {
     url: string,
     params: Params = {},
     headers: CustomHeaders = {},
+    options: IRequestOptions = {},
   ): Promise<T> {
     const queryString = HttpRequest.createQueryString(params);
     const fullURL = queryString ? `${url}?${queryString}` : url;
-    return this.request<T>("GET", fullURL, null, headers);
+    return this.request<T>("GET", fullURL, { ...options, headers });
   }
 
-  post<T>(url: string, body: unknown, headers: CustomHeaders = {}): Promise<T> {
-    return this.request<T>("POST", url, body, headers);
+  post<T>(
+    url: string,
+    body: unknown,
+    headers: CustomHeaders = {},
+    options: IRequestOptions = {},
+  ): Promise<T> {
+    return this.request<T>("POST", url, { ...options, headers, data: body });
   }
 
-  put<T>(url: string, body: unknown, headers: CustomHeaders = {}): Promise<T> {
-    return this.request<T>("PUT", url, body, headers);
+  put<T>(
+    url: string,
+    body: unknown,
+    headers: CustomHeaders = {},
+    options: IRequestOptions = {},
+  ): Promise<T> {
+    return this.request<T>("PUT", url, { ...options, headers, data: body });
   }
 
   delete<T>(
     url: string,
     body: unknown = null,
     headers: CustomHeaders = {},
+    options: IRequestOptions = {},
   ): Promise<T> {
-    return this.request<T>("DELETE", url, body, headers);
+    return this.request<T>("DELETE", url, { ...options, headers, data: body });
   }
 }

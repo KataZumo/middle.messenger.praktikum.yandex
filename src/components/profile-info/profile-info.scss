@@ -4,12 +4,6 @@ $link-color: #007bff;
 $button-color: white;
 
 .profile-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  position: relative;
 
   &__content {
     width: 600px;
