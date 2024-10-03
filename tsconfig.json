@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ESNext",
     "noEmitHelpers": true,
-    "module": "commonjs",
+    "module": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "resolveJsonModule": true,
+    "moduleResolution": "node",    
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -17,7 +17,7 @@
     "strictNullChecks": true,
     "baseUrl": "./src",
     "paths": {
-      "@api/*": ["api/*"]
+      "@api/*": ["api/*"],
     }
   },
   "include": ["src/**/*", "custom.d.ts", "server.js"],
