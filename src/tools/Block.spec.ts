@@ -1,9 +1,17 @@
 import { expect } from 'chai';
+import Block from './Block';
 
 describe('Block', () => {
-  it('тест прошел', () => {
-    const result = 1 + 1;
-    expect(result).to.equal(2);
+
+  it('рендер Handlebars', () => {
+    class TestBlock extends Block {
+      render(): string {
+        return '<div>{{text}}</div>';
+      }
+    }
+
+    const testBlock = new TestBlock();
+    testBlock.getContent();
+    expect(testBlock.element?.innerHTML).to.equal('Hello, World!');
   });
 });
-
