@@ -4,30 +4,30 @@ interface Listeners {
   [event: string]: Listener[];
 }
 
-export default class EventBus {
+export default class EventBus<T extends string = string> {
   private listeners: Listeners;
 
   constructor() {
     this.listeners = {};
   }
 
-  on(event: string, callback: Listener): void {
+  on(event: T, callback: Listener): void {
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
     this.listeners[event].push(callback);
   }
 
-  off(event: string, callback: Listener): void {
+  off(event: T, callback: Listener): void {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
     this.listeners[event] = this.listeners[event].filter(
-      (listener) => listener !== callback,
+      (listener) => listener !== callback
     );
   }
 
-  emit(event: string, ...args: any[]): void {
+  emit(event: T, ...args: any[]): void {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
