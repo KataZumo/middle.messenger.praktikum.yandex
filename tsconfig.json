@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "moduleResolution": "node",    
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -17,12 +17,12 @@
     "strictNullChecks": true,
     "baseUrl": "./src",
     "paths": {
-      "@api/*": ["api/*"],
+      "@api/*": ["api/*"]
     }
   },
   "include": ["src/**/*", "custom.d.ts", "server.js"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
-    "experimentalSpecifierResolution": "node",
-  },
+    "experimentalSpecifierResolution": "node"
+  }
 }
